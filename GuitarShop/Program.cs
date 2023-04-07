@@ -6,6 +6,7 @@ using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using GuitarShop.DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 

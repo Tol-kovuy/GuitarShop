@@ -3,15 +3,8 @@ using GuitarShop.BLL.Enum;
 using GuitarShop.BLL.Models;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
-using GuitarShop.DAL.Enum;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GuitarShop.BLL.AccountService;
 
@@ -33,7 +26,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            var userEntity = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.UserName == user.UserName);     
+            var userEntity = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.UserName == user.UserName);
             if (userEntity == null)
             {
                 return new BaseResponse<ClaimsIdentity>()
@@ -45,7 +38,7 @@ public class AccountService : IAccountService
             {
                 return new BaseResponse<ClaimsIdentity>()
                 {
-                    Description = "Password is not correct." 
+                    Description = "Password is not correct."
                 };
             }
             var authUser = _mapper.Map<User>(userEntity);
@@ -65,7 +58,40 @@ public class AccountService : IAccountService
                 StatusCode = StatusCode.InternalServerError
             }; // throw???
         }
-       
+    }
+
+    public async Task<BaseResponse<ClaimsIdentity>> Register(User user)
+    {
+        try
+        {
+            var userCheck = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.UserName == user.UserName);
+            if (userCheck != null)
+            {
+                return new BaseResponse<ClaimsIdentity>()
+                {
+                    Description = $"User with {user.UserName} name already exists. Please change user name."
+                };
+            }
+            var newUser = _mapper.Map<UserEntity>(user);
+            await _userRepository.CreateAsync(newUser);
+            var claimIdentity = Authenticate(user);
+
+            return new BaseResponse<ClaimsIdentity>()
+            {
+                Data = claimIdentity,
+                StatusCode = StatusCode.OK,
+                Description = $"{user.UserName} was registred!"
+            };
+        }
+        catch (Exception ex)
+        {
+            return new BaseResponse<ClaimsIdentity>()
+            {
+                Description = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            }; // throw???
+        }
+
     }
 
     private ClaimsIdentity Authenticate(User user)

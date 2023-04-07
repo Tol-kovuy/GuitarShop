@@ -6,4 +6,5 @@ namespace GuitarShop.BLL.AccountService;
 public interface IAccountService
 {
     Task<IBaseResponse<ClaimsIdentity>> Login(User user);
+    Task<BaseResponse<ClaimsIdentity>> Register(User user);
 }

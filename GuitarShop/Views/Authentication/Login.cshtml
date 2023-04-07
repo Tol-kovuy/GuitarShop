@@ -1,7 +1,6 @@
 ﻿@model GuitarShop.Models.AuthenticationViewModel
 
 <h2>Login</h2>
- <h2>@ViewData["Message"]</h2>
 <form method="post" asp-controller="Authentication" asp-action="Login">
     <div asp-validation-summary="ModelOnly"></div>
     <div>
@@ -11,7 +10,7 @@
     </div>
     <div>
         <label asp-for="Password"></label><br />
-        <input asp-for="Password" />
+        <input type ="password" asp-for="Password" />
         <span asp-validation-for="Password"></span>
     </div>
     <div>

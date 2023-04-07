@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GuitarShop.BLL.Enum;
 using GuitarShop.BLL.Models;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
@@ -22,31 +23,51 @@ namespace GuitarShop.BLL.UserService
             _userRepository = userRepository;
         }
 
-        public async Task CreateAsync(User user)
+        public async Task<IBaseResponse<User>> CreateAsync(User user)
         {
-            var userExist = GetAll().FirstOrDefault(x => x.UserName == user.UserName);
-
-            if (userExist == null)
+            try
             {
+                var allUsers = await GetAllAsync();
+                var userExist = allUsers.FirstOrDefault(u => u.UserName == user.UserName);
+
+                if (userExist != null)
+                {
+                    return new BaseResponse<User>()
+                    {
+                        Description = $"UserService {user.UserName} already exist.",
+                        StatusCode = StatusCode.UserAlreadyExists
+                    };
+                }
                 var newUser = _mapper.Map<UserEntity>(user);
                 await _userRepository.CreateAsync(newUser);
+                return new BaseResponse<User>()
+                {
+                    StatusCode = StatusCode.OK,
+                    Description = "Registration was successful!"
+                };
             }
-            else
+            catch (Exception ex)
             {
-                throw new Exception($"UserService {user.UserName} already exist.");//???
+                return new BaseResponse<User>()
+                {
+                    Description = ex.Message,
+                    StatusCode = StatusCode.InternalServerError
+                }; // throw???
             }
         }
 
-        public User GetById(int id)
+        public async Task<User> GetByIdAsync(int id)
         {
-            return GetAll().FirstOrDefault(x => x.Id == id);
+            var users = await GetAllAsync();
+            var user = users.FirstOrDefault(x => x.Id == id);
+            return user;
         }
 
-        public IList<User> GetAll()
+        public async Task<IList<User>> GetAllAsync()
         {
-            if (this._users == null) // Спросить за кеширование правильно ли я сделал
+            if (this._users == null) // Ask for кеширование правильно ли я сделал
             {
-                var usersFromDb = _userRepository.GetAll();
+                var usersFromDb = await _userRepository.GetAll().ToListAsync();
                 _users = new List<User>();
                 foreach (var user in usersFromDb)
                 {
@@ -56,18 +77,28 @@ namespace GuitarShop.BLL.UserService
             return _users;
         }
 
-        public void Delete(long id)
+        public async Task<BaseResponse<bool>> DeleteAsync(long id)
         {
-            var user = GetAll().FirstOrDefault(u => u.Id == id);
-            if (user != null)
+            var allUsers = await GetAllAsync();
+            var user = allUsers.FirstOrDefault(u => u.Id == id);
+            if (user == null)
             {
-                var userToEntity = _mapper.Map<UserEntity>(user);
-                _userRepository.DeleteAsync(userToEntity);
+                return new BaseResponse<bool>()
+                {
+                    Data = false,
+                    StatusCode = StatusCode.UserNotFound,
+                    Description = $"No user with ID: {id}."
+                };
+
             }
-            else
+            var userToEntity = _mapper.Map<UserEntity>(user);
+            await _userRepository.DeleteAsync(userToEntity);
+            return new BaseResponse<bool>()
             {
-                throw new Exception($"User with {id} not found!"); //???
-            }
+                Data = true,
+                StatusCode = StatusCode.OK,
+                Description = $"User with ID: {id} was deleted."
+            };
         }
     }
 }

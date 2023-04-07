@@ -28,8 +28,11 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <form asp-controller="Authentication" asp-action="Logout">
-                            <input class="nav-link text-dark" type="submit" value="LogOut" />
+                                <input class="nav-link text-dark" type="submit" value="LogOut" />
                             </form>
+                            <li class="nav-item">
+                                <a class="nav-link text-black" asp-controller="Cabinet" asp-action="Info">@User.Identity.Name</a>
+                            </li>
                         }
                         else
                         {
