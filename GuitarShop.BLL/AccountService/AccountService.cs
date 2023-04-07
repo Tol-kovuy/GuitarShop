@@ -33,7 +33,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            var userEntity = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.UserName == user.UserName);    
+            var userEntity = await _userRepository.GetAll().FirstOrDefaultAsync(u => u.UserName == user.UserName);     
             if (userEntity == null)
             {
                 return new BaseResponse<ClaimsIdentity>()
