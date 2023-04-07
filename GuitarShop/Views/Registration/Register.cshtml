@@ -1,0 +1,50 @@
+﻿@model GuitarShop.Models.RegistrationViewModel
+
+<h2>Registration</h2>
+<form method="post" asp-controller="Registration" asp-action="Register">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="FirstName"></label><br />
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName"></span>
+    </div>
+    <div>
+        <label asp-for="LastName"></label><br />
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
+    </div>
+    <div>
+        <label asp-for="UserName"></label><br />
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label><br />
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label><br />
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="ConfirmPassword"></label><br />
+        <input asp-for="ConfirmPassword" />
+        <span asp-validation-for="ConfirmPassword"></span>
+    </div>
+    <div>
+        <input type="submit" value="Registration" />
+    </div>
+</form>
+
+<h2>Delete User</h2>
+<form method="post" asp-controller="Registration" asp-action="Delete"> @*action="@Url.Action("Delete", "Registration")" method="post"*@
+    <label for="id">ID:</label>
+    <input type="text" name="id" />
+
+    <button type="submit">Submit</button>
+</form>
+
+
+
