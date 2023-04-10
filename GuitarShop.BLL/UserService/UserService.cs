@@ -46,13 +46,9 @@ namespace GuitarShop.BLL.UserService
                     Description = "Registration was successful!"
                 };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return new BaseResponse<User>()
-                {
-                    Description = ex.Message,
-                    StatusCode = StatusCode.InternalServerError
-                }; // throw???
+                throw;
             }
         }
 
@@ -79,26 +75,33 @@ namespace GuitarShop.BLL.UserService
 
         public async Task<BaseResponse<bool>> DeleteAsync(long id)
         {
-            var allUsers = await GetAllAsync();
-            var user = allUsers.FirstOrDefault(u => u.Id == id);
-            if (user == null)
+            try
             {
+                var allUsers = await GetAllAsync();
+                var user = allUsers.FirstOrDefault(u => u.Id == id);
+                if (user == null)
+                {
+                    return new BaseResponse<bool>()
+                    {
+                        Data = false,
+                        StatusCode = StatusCode.UserNotFound,
+                        Description = $"No user with ID: {id}."
+                    };
+
+                }
+                var userToEntity = _mapper.Map<UserEntity>(user);
+                await _userRepository.DeleteAsync(userToEntity);
                 return new BaseResponse<bool>()
                 {
-                    Data = false,
-                    StatusCode = StatusCode.UserNotFound,
-                    Description = $"No user with ID: {id}."
+                    Data = true,
+                    StatusCode = StatusCode.OK,
+                    Description = $"User with ID: {id} was deleted."
                 };
-
             }
-            var userToEntity = _mapper.Map<UserEntity>(user);
-            await _userRepository.DeleteAsync(userToEntity);
-            return new BaseResponse<bool>()
+            catch (Exception)
             {
-                Data = true,
-                StatusCode = StatusCode.OK,
-                Description = $"User with ID: {id} was deleted."
-            };
+                throw;
+            }
         }
     }
 }

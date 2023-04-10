@@ -1,8 +1,84 @@
 ﻿@model GuitarShop.BLL.Models.User
 
 <h1>Information about @Model.UserName:</h1>
+<p>ID: @Model.Id</p>
 <p>User Name: @Model.UserName</p>
 <p>First Name: @Model.FirstName</p>
 <p>Last Name: @Model.LastName</p>
 <p>Role: @Model.Role</p>
 <p>Email: @Model.Email</p>
+
+@if (User.IsInRole("Admin"))
+{
+    <h1>Information about all users:</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>UserName</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Role</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Users)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.UserName</td>
+                    <td>@item.FirstName</td>
+                    <td>@item.LastName</td>
+                    <td>@item.Role</td>
+                    <td>@item.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h2>Delete User</h2>
+    <form method="post" asp-controller="Cabinet" asp-action="Delete">
+        <label for="id">ID:</label>
+        <input type="text" name="id" />
+
+        <button type="submit">Delete User</button>
+    </form>
+    <h2>Adding User</h2>
+    <form method="post" asp-controller="Cabinet" asp-action="AddUser">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="FirstName"></label><br />
+            <input asp-for="FirstName" />
+            <span asp-validation-for="FirstName"></span>
+        </div>
+        <div>
+            <label asp-for="LastName"></label><br />
+            <input asp-for="LastName" />
+            <span asp-validation-for="LastName"></span>
+        </div>
+        <div>
+            <label asp-for="UserName"></label><br />
+            <input asp-for="UserName" />
+            <span asp-validation-for="UserName"></span>
+        </div>
+        <div>
+            <label asp-for="Email"></label><br />
+            <input asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label><br />
+            <input asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <label asp-for="Role"></label><br />
+            <input asp-for="Role" />
+            <span asp-validation-for="Role"></span>
+        </div>
+        <div>
+            <input type="submit" value="Add User" />
+        </div>
+    </form>
+}
+

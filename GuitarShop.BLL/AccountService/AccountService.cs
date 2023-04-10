@@ -50,13 +50,9 @@ public class AccountService : IAccountService
                 Description = $"{user.FirstName} {user.LastName}, welcome to Guitar Shop!"
             };
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return new BaseResponse<ClaimsIdentity>()
-            {
-                Description = ex.Message,
-                StatusCode = StatusCode.InternalServerError
-            }; // throw???
+            throw;
         }
     }
 
@@ -83,13 +79,9 @@ public class AccountService : IAccountService
                 Description = $"{user.UserName} was registred!"
             };
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return new BaseResponse<ClaimsIdentity>()
-            {
-                Description = ex.Message,
-                StatusCode = StatusCode.InternalServerError
-            }; // throw???
+            throw;
         }
 
     }

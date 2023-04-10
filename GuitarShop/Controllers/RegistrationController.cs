@@ -3,8 +3,8 @@ using GuitarShop.BLL.AccountService;
 using GuitarShop.BLL.Models;
 using GuitarShop.BLL.UserService;
 using GuitarShop.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -47,18 +47,6 @@ namespace GuitarShop.Controllers
                 ModelState.AddModelError("", response.Description);
             }
             return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(long id)
-        {
-            var allUsers = await _userService.GetAllAsync();
-            var foundingUser = allUsers.FirstOrDefault(u => u.Id == id);
-            if (foundingUser != null)
-            {
-                await _userService.DeleteAsync(foundingUser.Id);
-            }
-            return RedirectToAction("Register", "Registration");
         }
     }
 }

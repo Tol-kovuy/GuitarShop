@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Azure;
 using GuitarShop.BLL.AccountService;
 using GuitarShop.BLL.Models;
 using GuitarShop.BLL.UserService;
 using GuitarShop.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -40,7 +39,7 @@ namespace GuitarShop.Controllers
             {
                 var user = _mapper.Map<User>(model);
                 var response = await _accountService.Login(user);
-                if (response.StatusCode == BLL.Enum.StatusCode.OK) 
+                if (response.StatusCode == BLL.Enum.StatusCode.OK)
                 {
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(response.Data));
@@ -48,7 +47,7 @@ namespace GuitarShop.Controllers
                 }
                 ModelState.AddModelError("", response.Description);
             }
-           return View(model);
+            return View(model);
         }
 
         public async Task<IActionResult> Logout()

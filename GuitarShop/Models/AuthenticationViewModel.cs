@@ -12,7 +12,7 @@ namespace GuitarShop.Models
         [Required]
         [Display(Name = "Password")]
         [PasswordPropertyText(false)]
-        [StringLength(10, MinimumLength = 6, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        [StringLength(10, MinimumLength = 5, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Password { get; set;}
     }
 }
