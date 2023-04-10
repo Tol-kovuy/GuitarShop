@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using GuitarShop.BLL.AccountService;
 using GuitarShop.BLL.Models;
 using GuitarShop.BLL.UserService;
@@ -48,13 +49,13 @@ namespace GuitarShop.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(long id)
         {
-            var allUsers = await _userService.GetAllAsync();
-            var foundingUser = allUsers.FirstOrDefault(u => u.Id == id);
-            if (foundingUser != null)
+            if (ModelState.IsValid)
             {
-                await _userService.DeleteAsync(foundingUser.Id);
+                var response = await _userService.DeleteAsync(id);
+                ModelState.AddModelError("", response.Description);
             }
-            return RedirectToAction("Register", "Registration");
+                
+            return RedirectToAction("Info", "Cabinet");
         }
 
         [HttpPost]

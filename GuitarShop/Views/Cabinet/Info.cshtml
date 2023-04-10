@@ -1,6 +1,7 @@
 ﻿@model GuitarShop.BLL.Models.User
 
-<h1>Information about @Model.UserName:</h1>
+
+<h1>Information about @User.Identity.Name:</h1>
 <p>ID: @Model.Id</p>
 <p>User Name: @Model.UserName</p>
 <p>First Name: @Model.FirstName</p>
@@ -36,13 +37,17 @@
             }
         </tbody>
     </table>
+
     <h2>Delete User</h2>
+
     <form method="post" asp-controller="Cabinet" asp-action="Delete">
+        <div asp-validation-summary="All" style="font-size:23px; font-family:Impact" class="text-danger text-center"></div>
         <label for="id">ID:</label>
         <input type="text" name="id" />
 
         <button type="submit">Delete User</button>
     </form>
+
     <h2>Adding User</h2>
     <form method="post" asp-controller="Cabinet" asp-action="AddUser">
         <div asp-validation-summary="ModelOnly"></div>

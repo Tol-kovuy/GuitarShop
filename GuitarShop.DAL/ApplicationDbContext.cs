@@ -6,6 +6,7 @@ namespace GuitarShop.DAL;
 public class ApplicationDbContext : DbContext
 {
     public DbSet<UserEntity> UserEntities { get; set; }
+    public DbSet<ProductEntity> ProductEntities { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

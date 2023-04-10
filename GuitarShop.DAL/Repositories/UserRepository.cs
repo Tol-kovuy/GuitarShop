@@ -4,7 +4,7 @@ namespace GuitarShop.DAL.Repositories;
 
 public class UserRepository : IBaseRepository<UserEntity>
 {
-    private ApplicationDbContext _context;
+    private readonly ApplicationDbContext _context;
 
     public UserRepository(
         ApplicationDbContext applicationDbContext
@@ -24,11 +24,10 @@ public class UserRepository : IBaseRepository<UserEntity>
         return _context.UserEntities;
     }
 
-    public async Task<UserEntity> UpdateAsync(UserEntity user)
+    public async Task UpdateAsync(UserEntity user)
     {
-        _context.UserEntities.Add(user);
+        _context.UserEntities.Update(user);
         await _context.SaveChangesAsync();
-        return user;
     }
 
     public async Task DeleteAsync(UserEntity user)

@@ -1,14 +1,12 @@
 using GuitarShop;
 using GuitarShop.BLL.AccountService;
-using GuitarShop.BLL.Models;
+using GuitarShop.BLL.ProductService;
 using GuitarShop.BLL.UserService;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using GuitarShop.DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 internal class Program
 {
@@ -18,14 +16,18 @@ internal class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        builder.Services.AddDbContext<DbContext, ApplicationDbContext>(options =>
         {
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
         builder.Services.AddAutoMapper(typeof(MapperProfile));
         builder.Services.AddScoped<IBaseRepository<UserEntity>, UserRepository>();
+        builder.Services.AddScoped<IBaseRepository<ProductEntity>, ProductRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IAccountService, AccountService>();
+        builder.Services.AddScoped<IProductService, ProductService>();
+       
+
 
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
         {

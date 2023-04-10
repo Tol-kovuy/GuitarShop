@@ -4,8 +4,8 @@ public enum StatusCode
 {
     UserNotFound = 0,
     UserAlreadyExists = 1,
-
-    GuitarNotFound = 10,
+    ProductAlreadyExists = 2,
+    ProductNotFound = 10,
 
     OrderNotFound = 20,
 

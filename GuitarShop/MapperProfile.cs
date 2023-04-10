@@ -12,6 +12,6 @@ public class MapperProfile : Profile
         CreateMap<User, UserEntity>().ReverseMap();
         CreateMap<RegistrationViewModel, User>();
         CreateMap<AuthenticationViewModel, User>();
-        
+        CreateMap<ProductEntity, Product>().ReverseMap();
     }
 }

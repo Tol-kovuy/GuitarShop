@@ -1,5 +1,32 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using GuitarShop.BLL.Models;
+@model IList<Product>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="form-group">
+    <form asp-controller="Home" asp-action="Index">
+        <p>
+            <h5>What are You looking for?</h5>  @*class="mb-0 text-center paragraphHome text-black"*@
+            <input type="text" class="form-control" name="query" />
+            <input type="submit" class="btn btn-dark text-center" value="Find it!" />
+            <div asp-validation-summary="All" style="font-size:23px; font-family:Impact" class="text-danger text-center"></div>
+        </p>
+    </form>
+</div>
+<h1>@ViewBag.Message</h1>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var item in Model)
+    {
+        <ul style="display: flex; list-style: none; white-space: nowrap;">
+            <li style="margin-right: 10px;"><strong>@item.ProductName</strong></li>
+            <li style="margin-right: 10px;">@item.ProductDescription</li>
+            <strong>Price:</strong><li style="margin-right: 10px;">@item.Price</li>
+            <strong>Quantity:</strong><li style="margin-right: 10px;">@item.Quantity</li>
+        </ul>
+    }
 }
 
 <div class="text-center">
