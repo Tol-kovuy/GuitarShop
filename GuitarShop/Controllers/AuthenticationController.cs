@@ -43,7 +43,7 @@ namespace GuitarShop.Controllers
                 {
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(response.Data));
-                    return RedirectToAction("Privacy", "Home");
+                    return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", response.Description);
             }

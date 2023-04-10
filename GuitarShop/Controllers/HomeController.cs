@@ -43,9 +43,10 @@ namespace GuitarShop.Controllers
             return View("Index");
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Catalog()
         {
-            return View();
+            var allProducts = await _productService.GetAllAsync();
+            return View(allProducts);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

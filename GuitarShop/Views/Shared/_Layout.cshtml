@@ -4,43 +4,47 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - GuitarShop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Подключение CSS-файла FontAwesome -->
+    <link rel="stylesheet" href="~/lib/bootstrap/font-awesome.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GuitarShop.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GuitarShop</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse justify-content-center"
+                     id="navbarCenteredExample">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i>Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" asp-controller="Home" asp-action="Catalog"><i class="fas fa-guitar"></i>Catalog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/logo.bmp" alt="Home icon" width="100" height="80" /></a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <form asp-controller="Authentication" asp-action="Logout">
-                                <input class="nav-link text-dark" type="submit" value="LogOut" />
-                            </form>
                             <li class="nav-item">
-                                <a class="nav-link text-black" asp-controller="Cabinet" asp-action="Info">@User.Identity.Name</a>
+                                <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" style="color: darkturquoise" asp-controller="Cabinet" asp-action="Info"><i class="fas fa-user"></i>@User.Identity.Name</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="margin-top: 38px; color: saddlebrown" asp-controller="Authentication" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" asp-controller="Cart" asp-action="Cart"><i class="fas fa-shopping-cart"></i><span class="badge badge-danger"></span>10</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-black" asp-controller="Authentication" asp-action="Login">Login</a>
+                                <a class="nav-link" style="margin-top: 38px; color: saddlebrown" asp-controller="Authentication" asp-action="Login"><i class="fas fa-sign-in-alt"></i>Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-black" asp-controller="Registration" asp-action="Register">Registration</a>
+                                <a class="nav-link" style="margin-top: 38px; color: saddlebrown" asp-controller="Registration" asp-action="Register"><i class="fas fa-user-plus"></i>Registration</a>
                             </li>
                         }
                     </ul>
@@ -56,12 +60,8 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - GuitarShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - GuitarShop - <a asp-area="" asp-controller="Home" asp-action="Catalog">Catalog</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

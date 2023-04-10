@@ -1,0 +1,23 @@
+﻿@using GuitarShop.BLL.Models;
+@model IList<Product>
+
+@{
+    ViewData["Title"] = "Catalog";
+}
+<h1>@ViewData["Title"]</h1>
+
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var item in Model)
+    {
+        <ul style="display: flex; list-style: none; white-space: nowrap;">
+            <li style="margin-right: 10px;"><strong>@item.ProductName</strong></li>
+            <li style="margin-right: 10px;">@item.ProductDescription</li>
+            <strong>Price:</strong>
+            <li style="margin-right: 10px;">@item.Price</li>
+            <strong>Quantity:</strong>
+            <li style="margin-right: 10px;">@item.Quantity</li>
+        </ul>
+    }
+}
