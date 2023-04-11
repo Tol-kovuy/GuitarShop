@@ -29,7 +29,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" style="color: darkturquoise" asp-controller="Cabinet" asp-action="Info"><i class="fas fa-user"></i>@User.Identity.Name</a>
+                                <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" style="color: darkturquoise" asp-controller="Cabinet" asp-action="Index"><i class="fas fa-user"></i>@User.Identity.Name</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" style="margin-top: 38px; color: saddlebrown" asp-controller="Authentication" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>

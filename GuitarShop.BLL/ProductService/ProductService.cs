@@ -53,19 +53,19 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task<BaseResponse<bool>> DeleteAsync(string productName)
+    public async Task<BaseResponse<bool>> DeleteAsync(int id)
     {
         try
         {
             var products = await GetAllAsync();
-            var prod = products.FirstOrDefault(p => p.ProductName == productName);
+            var prod = products.FirstOrDefault(p => p.Id == id);
             if (prod == null)
             {
                 return new BaseResponse<bool>()
                 {
                     Data = false,
                     StatusCode = Enum.StatusCode.ProductNotFound,
-                    Description = $"Product '{productName}' not found."
+                    Description = $"Product with '{id}' ID not found."
                 };
             }
             var prodEntity = _mapper.Map<ProductEntity>(prod);
@@ -131,5 +131,28 @@ public class ProductService : IProductService
 
             throw;
         }
+    }
+
+    public async Task<IBaseResponse<bool>> UpdateAsync(Product product)
+    {
+        var products = await GetAllAsync();
+        var productExist = products.FirstOrDefault(p => p.Id == product.Id);
+        if (productExist == null)
+        {
+            return new BaseResponse<bool>()
+            {
+                Data= false,
+                Description = $"Product with id '{product.Id}' was not found.",
+                StatusCode = Enum.StatusCode.ProductNotFound
+            };
+        }
+        var productEntity = _mapper.Map<ProductEntity>(product);
+        await _productRepository.UpdateAsync(productEntity);
+        return new BaseResponse<bool>()
+        {
+            StatusCode= Enum.StatusCode.OK,
+            Data = true,
+            Description = "Product was updated."
+        };
     }
 }
