@@ -1,6 +1,8 @@
 ﻿using Azure;
 using GuitarShop.BLL.Models;
 using GuitarShop.BLL.ProductService;
+using GuitarShop.DAL;
+using GuitarShop.DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -9,12 +11,15 @@ namespace GuitarShop.Controllers
     public class CabinetProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IBaseRepository<ProductEntity> _prodRepos;
 
         public CabinetProductController(
-            IProductService productService
+            IProductService productService,
+             IBaseRepository<ProductEntity> prodRepos
             )
         {
             _productService = productService;
+            _prodRepos = prodRepos;
         }
 
         public async Task<IActionResult> Index()
@@ -38,7 +43,7 @@ namespace GuitarShop.Controllers
                 ViewBag.Message = prod.Description;
                 return View();
             }
-            
+
             return View();
         }
         [HttpGet]
@@ -53,13 +58,13 @@ namespace GuitarShop.Controllers
             if (ModelState.IsValid)
             {
                 var response = await _productService.CreateAsync(product);
-                ViewBag.Message = response.Description;
+                ViewBag.Message =  response.Description;
                 return View();
             }
             ModelState.AddModelError("", "Wtf");
             return View();
         }
-        
+
         public async Task<IActionResult> Details(int id)
         {
             var products = await _productService.GetAllAsync();
@@ -67,16 +72,18 @@ namespace GuitarShop.Controllers
             return View(product);
         }
 
-        public IActionResult Delete()
+        public async Task<IActionResult> Delete(int id, bool rez)
         {
-            return View();
+            var products = await _productService.GetAllAsync();
+            var prod = products.FirstOrDefault(x => x.Id == id);
+            return View(prod);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _productService.DeleteAsync(id);
-            return View("Index");
+            return RedirectToAction("Index");
         }
     }
 }

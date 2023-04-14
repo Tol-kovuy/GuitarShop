@@ -21,6 +21,7 @@ internal class Program
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
         builder.Services.AddAutoMapper(typeof(MapperProfile));
+        builder.Services.AddScoped<MapperProfile>();
         builder.Services.AddScoped<IBaseRepository<UserEntity>, UserRepository>();
         builder.Services.AddScoped<IBaseRepository<ProductEntity>, ProductRepository>();
         builder.Services.AddScoped<IUserService, UserService>();

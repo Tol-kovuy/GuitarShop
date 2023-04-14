@@ -8,7 +8,7 @@
 <h2>Index</h2>
 
 <p>
-   <form asp-action="Create" asp-controller="CabinetProduct" method="get">
+    <form asp-action="Create" asp-controller="CabinetProduct" method="get">
         <button type="submit" class="btn btn-outline-primary">Add New Product</button>
     </form>
 </p>
@@ -41,7 +41,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
-            <td>
+            <td class="d-inline-block text-truncate" style="max-width: 150px;">
                 @Html.DisplayFor(modelItem => item.ProductDescription)
             </td>
             <td>

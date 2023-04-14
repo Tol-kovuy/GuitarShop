@@ -4,35 +4,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>@Model.ProductName</h2>
 <div class="form-horizontal">
     <hr />
+
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ProductName)
+            <p class="text-justify">@Html.DisplayNameFor(item => item.ProductDescription)</p>
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ProductName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductDescription)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductDescription)
+            @Html.DisplayFor(item => item.ProductDescription)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.DisplayNameFor(item => item.Price)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Price)
+            @Html.DisplayFor(item => item.Price)$
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Quantity)
+            @Html.DisplayNameFor(item => item.Quantity)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Quantity)
+            @Html.DisplayFor(item => item.Quantity)
+        </dd>
+            <img src="~/img/Catalog/@Model.FileName" class="rounded-start" width="150" height="400" asp-append-version="true" />
         </dd>
     </dl>
 </div>
