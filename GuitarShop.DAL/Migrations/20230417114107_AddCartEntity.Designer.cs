@@ -4,6 +4,7 @@ using GuitarShop.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuitarShop.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230417114107_AddCartEntity")]
+    partial class AddCartEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +38,7 @@ namespace GuitarShop.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserEntityId")
-                        .IsUnique();
+                    b.HasIndex("UserEntityId");
 
                     b.ToTable("CartEntities");
                 });
@@ -82,9 +84,6 @@ namespace GuitarShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("CartEntityId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -111,8 +110,8 @@ namespace GuitarShop.DAL.Migrations
             modelBuilder.Entity("GuitarShop.DAL.Entities.CartEntity", b =>
                 {
                     b.HasOne("GuitarShop.DAL.Entities.UserEntity", "UserEntity")
-                        .WithOne("CartEntity")
-                        .HasForeignKey("GuitarShop.DAL.Entities.CartEntity", "UserEntityId")
+                        .WithMany()
+                        .HasForeignKey("UserEntityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -129,11 +128,6 @@ namespace GuitarShop.DAL.Migrations
             modelBuilder.Entity("GuitarShop.DAL.Entities.CartEntity", b =>
                 {
                     b.Navigation("ProductEntity");
-                });
-
-            modelBuilder.Entity("GuitarShop.DAL.Entities.UserEntity", b =>
-                {
-                    b.Navigation("CartEntity");
                 });
 #pragma warning restore 612, 618
         }

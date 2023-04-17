@@ -13,11 +13,23 @@
     {
         <ul style="display: flex; list-style: none; white-space: nowrap;">
             <li style="margin-right: 10px;"><strong>@item.ProductName</strong></li>
-            <li style="margin-right: 10px;">@item.ProductDescription</li>
+            <li class="text-truncate" style="margin-right: 10px;">@item.ProductDescription</li>
             <strong>Price:</strong>
             <li style="margin-right: 10px;">@item.Price</li>
             <strong>Quantity:</strong>
             <li style="margin-right: 10px;">@item.Quantity</li>
+            <img src="~/img/Catalog/@item.FileName" class="img-fluid" width="150" height="400" asp-append-version="true" />
+            @if (User.Identity.IsAuthenticated)
+            {
+                @using (Html.BeginForm("AddToCart", "Cart"))
+                {
+                    <div class="pull-right">
+                        @*@Html.HiddenFor(x => x.GameId)
+                        @Html.Hidden("returnUrl", Request.Url.PathAndQuery)*@
+                        <input type="submit" class="btn btn-success" value="Добавить в корзину" />
+                    </div>
+                }
+            }
         </ul>
     }
 }

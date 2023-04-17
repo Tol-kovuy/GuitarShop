@@ -54,17 +54,5 @@ namespace GuitarShop.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        //public async Task<IActionResult> SearchByName(string query)
-        //{
-        //    if (!String.IsNullOrEmpty(query))
-        //    {
-        //        var search = await _productService.GetByNameAsync(query);
-        //        var list = search.Data;
-        //        return View(list);
-        //    }
-
-        //    return View("Index");
-        //}
     }
 }
