@@ -86,9 +86,10 @@ public class AccountService : IAccountService
                 Email = user.Email,
                 Password= user.Password,
                 Role= user.Role,
-                CartEntity = new CartEntity()
+                CartEntity = new CartEntity() { },
             };
             await _userRepository.CreateAsync(newUser);
+            await _cartRepository.CreateAsync(newUser.CartEntity);
             var claimIdentity = Authenticate(user);
 
             return new BaseResponse<ClaimsIdentity>()
