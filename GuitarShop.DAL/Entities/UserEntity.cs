@@ -12,7 +12,6 @@ public class UserEntity
     public string Password { get; set; }
     public string Email { get; set; }
     public Role Role { get; set; }
-    public long CartEntityId { get; set; }
     public CartEntity CartEntity { get; set; }
 }
 

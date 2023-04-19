@@ -11,4 +11,5 @@ public class ProductEntity
     public decimal Price { get; set; }
     public int Quantity { get; set; }
     public string ImageData { get; set; }
+    public IList<CartEntity> CartEntities { get; set; }
 }

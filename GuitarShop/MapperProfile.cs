@@ -12,6 +12,10 @@ public class MapperProfile : Profile
     public MapperProfile()
     {
         CreateMap<User, UserEntity>().ReverseMap();
+        CreateMap<Cart, CartEntity>()
+            .ForMember(dest => dest.UserEntityId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.ProductEntities, opt => opt.MapFrom(src => src.Product))
+            .ForMember(dest => dest.UserEntity, opt => opt.MapFrom(src => src.User));
         CreateMap<RegistrationViewModel, User>();
         CreateMap<AuthenticationViewModel, User>();
         CreateMap<Product, ProductEntity>()

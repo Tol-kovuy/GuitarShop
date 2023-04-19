@@ -1,5 +1,6 @@
 using GuitarShop;
 using GuitarShop.BLL.AccountService;
+using GuitarShop.BLL.CartService;
 using GuitarShop.BLL.ProductService;
 using GuitarShop.BLL.UserService;
 using GuitarShop.DAL;
@@ -27,8 +28,8 @@ internal class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<IProductService, ProductService>();
-       
-
+        builder.Services.AddScoped<IBaseRepository<CartEntity>, CartRepository>();
+        builder.Services.AddScoped<ICartService, CartService>();
 
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
         {

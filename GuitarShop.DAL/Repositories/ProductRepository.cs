@@ -19,12 +19,6 @@ public class ProductRepository : IBaseRepository<ProductEntity>
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(ProductEntity entity)
-    {
-        _context.ProductEntities.Remove(entity);
-        await _context.SaveChangesAsync();
-    }
-
     public IQueryable<ProductEntity> GetAll()
     {
         return _context.ProductEntities;
@@ -35,4 +29,10 @@ public class ProductRepository : IBaseRepository<ProductEntity>
         _context.ProductEntities.Update(entity);
         await _context.SaveChangesAsync();
     }
+    public async Task DeleteAsync(ProductEntity entity)
+    {
+        _context.ProductEntities.Remove(entity);
+        await _context.SaveChangesAsync();
+    }
+
 }

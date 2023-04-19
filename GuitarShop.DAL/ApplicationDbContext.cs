@@ -21,17 +21,9 @@ public class ApplicationDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserEntity>()
-            .HasOne(user => user.CartEntity)
-            .WithOne(cart => cart.UserEntity)
-            .HasForeignKey<UserEntity>(user => user.CartEntityId);
-
-        modelBuilder.Entity<CartEntity>()
-            .HasOne(cart => cart.UserEntity)
-            .WithOne(user => user.CartEntity)
-            .HasForeignKey<CartEntity>(cart => cart.UserEntityId);
-
-        modelBuilder.Entity<CartEntity>()
-            .HasMany(cart => cart.ProductEntity);
+        //modelBuilder.Entity<UserEntity>()
+        //        .HasOne(user => user.CartEntity)
+        //        .WithOne(cart => cart.UserEntity)
+        //        .HasForeignKey<CartEntity>(cart => cart.Id);
     }
 }
