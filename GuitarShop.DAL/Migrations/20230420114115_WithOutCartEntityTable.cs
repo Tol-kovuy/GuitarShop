@@ -5,7 +5,7 @@
 namespace GuitarShop.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTableCartEntitiesIsOK : Migration
+    public partial class WithOutCartEntityTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

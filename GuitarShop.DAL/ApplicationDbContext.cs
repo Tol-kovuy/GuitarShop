@@ -21,9 +21,6 @@ public class ApplicationDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.Entity<UserEntity>()
-        //        .HasOne(user => user.CartEntity)
-        //        .WithOne(cart => cart.UserEntity)
-        //        .HasForeignKey<CartEntity>(cart => cart.Id);
+       
     }
 }

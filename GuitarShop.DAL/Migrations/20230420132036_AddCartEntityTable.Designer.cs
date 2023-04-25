@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuitarShop.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230418140828_AddTableCartEntities")]
-    partial class AddTableCartEntities
+    [Migration("20230420132036_AddCartEntityTable")]
+    partial class AddCartEntityTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,21 +23,6 @@ namespace GuitarShop.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CartEntityProductEntity", b =>
-                {
-                    b.Property<long>("CartEntitiesId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("ProductEntitiesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartEntitiesId", "ProductEntitiesId");
-
-                    b.HasIndex("ProductEntitiesId");
-
-                    b.ToTable("CartEntityProductEntity");
-                });
 
             modelBuilder.Entity("GuitarShop.DAL.Entities.CartEntity", b =>
                 {
@@ -115,21 +100,6 @@ namespace GuitarShop.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserEntities");
-                });
-
-            modelBuilder.Entity("CartEntityProductEntity", b =>
-                {
-                    b.HasOne("GuitarShop.DAL.Entities.CartEntity", null)
-                        .WithMany()
-                        .HasForeignKey("CartEntitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GuitarShop.DAL.Entities.ProductEntity", null)
-                        .WithMany()
-                        .HasForeignKey("ProductEntitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("GuitarShop.DAL.Entities.CartEntity", b =>

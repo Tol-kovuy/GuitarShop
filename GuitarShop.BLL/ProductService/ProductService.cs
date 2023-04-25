@@ -33,7 +33,7 @@ public class ProductService : IProductService
                 return new BaseResponse<Product>
                 {
                     Data = product,
-                    Description = $"Product with name '{product.ProductName}' already exist.",
+                    Description = $"Products with name '{product.ProductName}' already exist.",
                     StatusCode = Enum.StatusCode.ProductAlreadyExists
                 };
             }
@@ -43,7 +43,7 @@ public class ProductService : IProductService
             {
                 Data = product,
                 StatusCode = Enum.StatusCode.OK,
-                Description = $"Product '{product.ProductName}' added."
+                Description = $"Products '{product.ProductName}' added."
             };
         }
         catch (Exception)
@@ -65,7 +65,7 @@ public class ProductService : IProductService
                 {
                     Data = false,
                     StatusCode = Enum.StatusCode.ProductNotFound,
-                    Description = $"Product with '{id}' ID not found."
+                    Description = $"Products with '{id}' ID not found."
                 };
             }
             var prodEntity = _mapper.Map<ProductEntity>(prod);
@@ -74,7 +74,7 @@ public class ProductService : IProductService
             {
                 Data = true,
                 StatusCode = Enum.StatusCode.OK,
-                Description = $"Product '{prod.ProductName}' was deleted."
+                Description = $"Products '{prod.ProductName}' was deleted."
             };
         }
         catch (Exception)
@@ -142,7 +142,7 @@ public class ProductService : IProductService
             return new BaseResponse<bool>()
             {
                 Data= false,
-                Description = $"Product with id '{product.Id}' was not found.",
+                Description = $"Products with id '{product.Id}' was not found.",
                 StatusCode = Enum.StatusCode.ProductNotFound
             };
         }
@@ -152,7 +152,7 @@ public class ProductService : IProductService
         {
             StatusCode= Enum.StatusCode.OK,
             Data = true,
-            Description = "Product was updated."
+            Description = "Products was updated."
         };
     }
 }
