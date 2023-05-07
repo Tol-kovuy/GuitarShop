@@ -86,7 +86,7 @@ namespace GuitarShop.Controllers
             var currentCart = _cartService.GetByUserId(currentUser.Id);
             var findCartItemByProduct = currentCart.CartItems.SingleOrDefault(x => x.ProductId == id);
             await _cartService.DeleteCartItem(findCartItemByProduct);
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         private async Task<User> GetCurrentUser()
