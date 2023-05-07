@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GuitarShop.BLL.Models;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using Microsoft.Data.SqlClient;
@@ -9,12 +8,12 @@ namespace GuitarShop.BLL.ProductService;
 
 public class ProductService : IProductService
 {
-    private readonly IBaseRepository<ProductEntity> _productRepository;
+    private readonly IBaseRepository<DAL.Entities.Product> _productRepository;
     private readonly IMapper _mapper;
     private IList<Product> _products;
 
     public ProductService(
-         IBaseRepository<ProductEntity> productRepository,
+         IBaseRepository<DAL.Entities.Product> productRepository,
          IMapper mapper
         )
     {
@@ -37,7 +36,7 @@ public class ProductService : IProductService
                     StatusCode = Enum.StatusCode.ProductAlreadyExists
                 };
             }
-            var newProduct = _mapper.Map<ProductEntity>(product);
+            var newProduct = _mapper.Map<DAL.Entities.Product>(product);
             await _productRepository.CreateAsync(newProduct);
             return new BaseResponse<Product>()
             {
@@ -53,7 +52,7 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task<BaseResponse<bool>> DeleteAsync(int id)
+    public async Task<IBaseResponse<bool>> DeleteAsync(int id)
     {
         try
         {
@@ -68,7 +67,7 @@ public class ProductService : IProductService
                     Description = $"Products with '{id}' ID not found."
                 };
             }
-            var prodEntity = _mapper.Map<ProductEntity>(prod);
+            var prodEntity = _mapper.Map<DAL.Entities.Product>(prod);
             await _productRepository.DeleteAsync(prodEntity);
             return new BaseResponse<bool>()
             {
@@ -104,6 +103,13 @@ public class ProductService : IProductService
 
             throw;
         }
+    }
+
+    public async Task<Product> GetByIdAsync(long id)
+    {
+        var products = await GetAllAsync();
+        var product = products.FirstOrDefault(product => product.Id == id);
+        return product;
     }
 
     public async Task<IBaseResponse<IList<Product>>> GetByNameAsync(string name)
@@ -146,7 +152,7 @@ public class ProductService : IProductService
                 StatusCode = Enum.StatusCode.ProductNotFound
             };
         }
-        var productEntity = _mapper.Map<ProductEntity>(product);
+        var productEntity = _mapper.Map<DAL.Entities.Product>(product);
         await _productRepository.UpdateAsync(productEntity);
         return new BaseResponse<bool>()
         {

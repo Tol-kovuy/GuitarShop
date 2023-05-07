@@ -1,4 +1,4 @@
-﻿using GuitarShop.BLL.Models;
+﻿using GuitarShop.DAL.Entities;
 using System.Security.Claims;
 
 namespace GuitarShop.BLL.AccountService;

@@ -1,0 +1,39 @@
+﻿@using GuitarShop.DAL.Entities;
+@model CartViewModel
+
+<h1>@User.Identity.Name's Cart</h1>
+
+@if (Model == null)
+{
+    <p>Cart is empty...</p>
+}
+else
+{
+    @foreach (var cart in Model.CartItems)
+    {
+        <ul style="display: flex; list-style: none; white-space: nowrap;">
+            <li style="margin-right: 10px;"><strong>@cart.ProductName</strong></li>
+            <li class="text-truncate" style="margin-right: 10px;">@cart.ProductDescription</li>
+            <li style="margin-right: 10px;">@cart.Price</li>
+            <li style="margin-right: 10px;">@cart.Quantity</li>
+            <img src="~/img/Catalog/@cart.ImageData" class="img-fluid" width="40" height="120" asp-append-version="true" />
+        </ul>
+         @using (Html.BeginForm())
+            {
+                <div class="pull-right">
+                <input type="submit" class="btn btn-danger" value="Delete Item" asp-route-id="@cart.ProductId" asp-controller="Cart" asp-action="DeleteOneProductFromCart" />
+                </div>
+            }
+    }
+       
+
+    <strong>Total: @Model.TotalPrice</strong>
+}
+
+<a href="@Url.Action("Catalog", "Home")">Go to Catalog</a>
+@using (Html.BeginForm())
+{
+    <div class="pull-left">
+        <input type="submit" class="btn btn-danger" value="Delete All" asp-controller="Cart" asp-action="CleanCart" />
+    </div>
+}

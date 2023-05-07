@@ -1,4 +1,4 @@
-﻿using GuitarShop.BLL.Models;
+﻿using GuitarShop.DAL.Entities;
 
 namespace GuitarShop.BLL.UserService
 {
@@ -7,6 +7,7 @@ namespace GuitarShop.BLL.UserService
         Task<IBaseResponse<User>> CreateAsync(User user);
         Task<BaseResponse<bool>> DeleteAsync(long id);
         Task<IList<User>> GetAllAsync();
-        Task<User> GetByIdAsync(int id);
+        Task<User> GetByIdAsync(long id);
+        Task<User> GetByNameAsync(string name);
     }
 }

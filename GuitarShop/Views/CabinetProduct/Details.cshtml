@@ -1,4 +1,4 @@
-﻿@model GuitarShop.BLL.Models.Product
+﻿@model GuitarShop.DAL.Entities.Product
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -29,7 +29,7 @@
         <dd>
             @Html.DisplayFor(item => item.Quantity)
         </dd>
-            <img src="~/img/Catalog/@Model.FileName" class="rounded-start" width="150" height="400" asp-append-version="true" />
+            <img src="~/img/Catalog/@Model.ImageData" class="rounded-start" width="150" height="400" asp-append-version="true" />
         </dd>
     </dl>
 </div>

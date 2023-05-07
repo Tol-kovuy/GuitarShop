@@ -1,8 +1,10 @@
 ﻿using GuitarShop.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GuitarShop.DAL.Repositories;
 
-public class UserRepository : IBaseRepository<UserEntity>
+public class UserRepository : IBaseRepository<User>
 {
     private readonly ApplicationDbContext _context;
 
@@ -13,26 +15,26 @@ public class UserRepository : IBaseRepository<UserEntity>
         _context = applicationDbContext;
     }
 
-    public async Task CreateAsync(UserEntity user)
+    public async Task CreateAsync(User user)
     {
-        await _context.UserEntities.AddAsync(user);
+        await _context.Users.AddAsync(user);
         await _context.SaveChangesAsync();
     }
 
-    public IQueryable<UserEntity> GetAll()
+    public IQueryable<User> GetAll()
     {
-        return _context.UserEntities;
+        return _context.Users;
     }
 
-    public async Task UpdateAsync(UserEntity user)
+    public async Task UpdateAsync(User user)
     {
-        _context.UserEntities.Update(user);
+        _context.Users.Update(user);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(UserEntity user)
+    public async Task DeleteAsync(User user)
     {
-        _context.UserEntities.Remove(user);
+        _context.Users.Remove(user);
         await _context.SaveChangesAsync();
     }
 }

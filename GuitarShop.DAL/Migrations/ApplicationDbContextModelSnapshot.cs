@@ -22,22 +22,7 @@ namespace GuitarShop.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CartEntityProductEntity", b =>
-                {
-                    b.Property<long>("CartEntitiesId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("ProductEntitiesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartEntitiesId", "ProductEntitiesId");
-
-                    b.HasIndex("ProductEntitiesId");
-
-                    b.ToTable("CartEntityProductEntity");
-                });
-
-            modelBuilder.Entity("GuitarShop.DAL.Entities.CartEntity", b =>
+            modelBuilder.Entity("GuitarShop.DAL.Entities.Cart", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,21 +30,50 @@ namespace GuitarShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("UserEntityId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserEntityId")
+                    b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("CartEntities");
+                    b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("GuitarShop.DAL.Entities.ProductEntity", b =>
+            modelBuilder.Entity("GuitarShop.DAL.Entities.CartItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CartId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("ProductId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId1");
+
+                    b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("GuitarShop.DAL.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,10 +98,10 @@ namespace GuitarShop.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductEntities");
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("GuitarShop.DAL.Entities.UserEntity", b =>
+            modelBuilder.Entity("GuitarShop.DAL.Entities.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -115,38 +129,41 @@ namespace GuitarShop.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserEntities");
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("CartEntityProductEntity", b =>
+            modelBuilder.Entity("GuitarShop.DAL.Entities.Cart", b =>
                 {
-                    b.HasOne("GuitarShop.DAL.Entities.CartEntity", null)
+                    b.HasOne("GuitarShop.DAL.Entities.User", null)
+                        .WithOne("Cart")
+                        .HasForeignKey("GuitarShop.DAL.Entities.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GuitarShop.DAL.Entities.CartItem", b =>
+                {
+                    b.HasOne("GuitarShop.DAL.Entities.Cart", null)
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GuitarShop.DAL.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("CartEntitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId1");
 
-                    b.HasOne("GuitarShop.DAL.Entities.ProductEntity", null)
-                        .WithMany()
-                        .HasForeignKey("ProductEntitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("GuitarShop.DAL.Entities.CartEntity", b =>
+            modelBuilder.Entity("GuitarShop.DAL.Entities.Cart", b =>
                 {
-                    b.HasOne("GuitarShop.DAL.Entities.UserEntity", "UserEntity")
-                        .WithOne("CartEntity")
-                        .HasForeignKey("GuitarShop.DAL.Entities.CartEntity", "UserEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserEntity");
+                    b.Navigation("CartItems");
                 });
 
-            modelBuilder.Entity("GuitarShop.DAL.Entities.UserEntity", b =>
+            modelBuilder.Entity("GuitarShop.DAL.Entities.User", b =>
                 {
-                    b.Navigation("CartEntity");
+                    b.Navigation("Cart");
                 });
 #pragma warning restore 612, 618
         }

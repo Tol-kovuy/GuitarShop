@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
 using GuitarShop.BLL.AccountService;
-using GuitarShop.BLL.Models;
 using GuitarShop.BLL.UserService;
 using Microsoft.AspNetCore.Mvc;
 

@@ -2,7 +2,7 @@
 
 namespace GuitarShop.DAL.Repositories;
 
-public class ProductRepository : IBaseRepository<ProductEntity>
+public class ProductRepository : IBaseRepository<Product>
 {
     private readonly ApplicationDbContext _context;
 
@@ -13,25 +13,25 @@ public class ProductRepository : IBaseRepository<ProductEntity>
         _context = context;
     }
 
-    public async Task CreateAsync(ProductEntity entity)
+    public async Task CreateAsync(Product entity)
     {
-        await _context.ProductEntities.AddAsync(entity);
+        await _context.Products.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
-    public IQueryable<ProductEntity> GetAll()
+    public IQueryable<Product> GetAll()
     {
-        return _context.ProductEntities;
+        return _context.Products;
     }
 
-    public async Task UpdateAsync(ProductEntity entity)
+    public async Task UpdateAsync(Product entity)
     {
-        _context.ProductEntities.Update(entity);
+        _context.Products.Update(entity);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteAsync(ProductEntity entity)
+    public async Task DeleteAsync(Product entity)
     {
-        _context.ProductEntities.Remove(entity);
+        _context.Products.Remove(entity);
         await _context.SaveChangesAsync();
     }
 

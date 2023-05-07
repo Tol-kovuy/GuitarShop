@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.Enum;
-using GuitarShop.BLL.Models;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +10,12 @@ namespace GuitarShop.BLL.UserService
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
-        private readonly IBaseRepository<UserEntity> _userRepository;
+        private readonly IBaseRepository<DAL.Entities.User> _userRepository;
         private IList<User> _users;
 
         public UserService(
             IMapper mapper,
-            IBaseRepository<UserEntity> userRepository
+            IBaseRepository<DAL.Entities.User> userRepository
             )
         {
             _mapper = mapper;
@@ -38,7 +37,7 @@ namespace GuitarShop.BLL.UserService
                         StatusCode = StatusCode.UserAlreadyExists
                     };
                 }
-                var newUser = _mapper.Map<UserEntity>(user);
+                var newUser = _mapper.Map<DAL.Entities.User>(user);
                 await _userRepository.CreateAsync(newUser);
                 return new BaseResponse<User>()
                 {
@@ -52,7 +51,7 @@ namespace GuitarShop.BLL.UserService
             }
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<User> GetByIdAsync(long id)
         {
             var users = await GetAllAsync();
             var user = users.FirstOrDefault(x => x.Id == id);
@@ -61,15 +60,8 @@ namespace GuitarShop.BLL.UserService
 
         public async Task<IList<User>> GetAllAsync()
         {
-            if (this._users == null) // Ask for кеширование правильно ли я сделал
-            {
-                var usersFromDb = await _userRepository.GetAll().ToListAsync();
-                _users = new List<User>();
-                foreach (var user in usersFromDb)
-                {
-                    _users.Add(_mapper.Map<User>(user));
-                }
-            }
+            var _users = await _userRepository.GetAll().ToListAsync();
+
             return _users;
         }
 
@@ -89,7 +81,7 @@ namespace GuitarShop.BLL.UserService
                     };
 
                 }
-                var userToEntity = _mapper.Map<UserEntity>(user);
+                var userToEntity = _mapper.Map<DAL.Entities.User>(user);
                 await _userRepository.DeleteAsync(userToEntity);
                 return new BaseResponse<bool>()
                 {
@@ -100,6 +92,21 @@ namespace GuitarShop.BLL.UserService
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public async Task<User> GetByNameAsync(string name)
+        {
+
+            try
+            {
+                var users = await GetAllAsync();
+                return users.FirstOrDefault(user => user.UserName == name);
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.Enum;
-using GuitarShop.BLL.Models;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
+using GuitarShop.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -10,18 +10,17 @@ namespace GuitarShop.BLL.AccountService;
 
 public class AccountService : IAccountService
 {
-    private readonly IBaseRepository<UserEntity> _userRepository;
-    //private readonly IBaseRepository<CartEntity> _cartRepository;
+    private readonly IBaseRepository<User> _userRepository;
     private readonly IMapper _mapper;
 
     public AccountService(
-        IBaseRepository<UserEntity> userRepository,
-        IMapper mapper)//,
-        //IBaseRepository<CartEntity> cartRepository)
+        IBaseRepository<User> userRepository,
+        IMapper mapper,
+        ICartRepository cartRepository
+        )
     {
         _userRepository = userRepository;
         _mapper = mapper;
-        //_cartRepository = cartRepository;
     }
 
     public async Task<IBaseResponse<ClaimsIdentity>> Login(User user)
@@ -43,15 +42,7 @@ public class AccountService : IAccountService
                     Description = "Password is not correct."
                 };
             }
-            var authUser = _mapper.Map<User>(userEntity);
-            //var cart = new Cart()
-            //{
-            //    UserId = userEntity.Id,
-            //    User = authUser
-            //};
-            //var cartEntity = _mapper.Map<CartEntity>(cart);
-            //await _cartRepository.CreateAsync(cartEntity);
-            var result = Authenticate(authUser);
+            var result = Authenticate(userEntity);
             return new BaseResponse<ClaimsIdentity>()
             {
                 Data = result,
@@ -77,19 +68,8 @@ public class AccountService : IAccountService
                     Description = $"User with {user.UserName} name already exists. Please change user name."
                 };
             }
-            var newUser = _mapper.Map<UserEntity>(user);
-            //var newUser = new UserEntity()
-            //{
-            //    UserName = user.UserName,
-            //    FirstName = user.FirstName,
-            //    LastName = user.LastName,
-            //    Email = user.Email,
-            //    Password= user.Password,
-            //    Role= user.Role,
-            //    CartEntity = new CartEntity() { },
-            //};
+            var newUser = _mapper.Map<DAL.Entities.User>(user);
             await _userRepository.CreateAsync(newUser);
-            //await _cartRepository.CreateAsync(newUser.CartEntity);
             var claimIdentity = Authenticate(user);
 
             return new BaseResponse<ClaimsIdentity>()

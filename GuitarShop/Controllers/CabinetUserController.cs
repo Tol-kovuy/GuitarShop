@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.AccountService;
-using GuitarShop.BLL.Models;
 using GuitarShop.BLL.UserService;
+using GuitarShop.DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuitarShop.Controllers;
@@ -22,11 +22,6 @@ public class CabinetUserController : Controller
         _mapper = mapper;
     }
 
-    //public IActionResult Index()
-    //{
-    //    return View();
-    //}
-
     public async Task<IActionResult> Index()
     {
         var currentUser = HttpContext.User;
@@ -40,8 +35,7 @@ public class CabinetUserController : Controller
             LastName = info.LastName,
             Email = info.Email,
             Password = info.Password,
-            Role = info.Role,
-            Users = users,
+            Role = info.Role
         };
         return View(collections);
     }

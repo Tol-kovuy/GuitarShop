@@ -1,7 +1,14 @@
-﻿using GuitarShop.BLL.Models;
+﻿using AutoMapper;
+using GuitarShop.BLL.Dtos;
+using GuitarShop.BLL.UserService;
+using GuitarShop.DAL;
+using GuitarShop.DAL.Entities;
+using GuitarShop.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,13 +16,89 @@ namespace GuitarShop.BLL.CartService;
 
 public class CartService : ICartService
 {
-    public Task<IBaseResponse<bool>> AddToCart(Product product)
+    private readonly ICartRepository _cartRepository;
+    private readonly IBaseRepository<User> _userRepository;
+    private readonly IUserService _userService;
+    private readonly IBaseRepository<Product> _productRepository;
+    private readonly IMapper _mapper;
+
+    public CartService(
+        ICartRepository cartRepository,
+        IUserService userService,
+        IBaseRepository<Product> productRepository,
+        IMapper mapper,
+        IBaseRepository<User> userRepository
+        )
     {
-        throw new NotImplementedException();
+        _cartRepository = cartRepository;
+        _userService = userService;
+        _productRepository = productRepository;
+        _mapper = mapper;
+        _userRepository = userRepository;
     }
 
-    public Task<IBaseResponse<bool>> DeleteItem(int id)
+    public async Task AddToCart(AddToCartDto dto)
     {
-        throw new NotImplementedException();
+        var product = _productRepository.GetAll().SingleOrDefault(p => p.Id == dto.ProductId);
+        var cart = _cartRepository.GetAll().SingleOrDefault(cart => cart.UserId == dto.UserId);
+        if (cart == null)
+        {
+            var newCart = new Cart
+            {
+                UserId = dto.UserId,
+                CartItems = new List<CartItem>()
+            };
+            await _cartRepository.CreateAsync(newCart);
+        }
+        cart = _cartRepository.GetAll().SingleOrDefault(cart => cart.UserId == dto.UserId);
+        var existProduct = cart.CartItems.SingleOrDefault(p => p.ProductId == dto.ProductId);
+        if (existProduct == null)
+        {
+            var cartItem = new CartItem
+            {
+                ProductId = dto.ProductId,
+                CreatedDate = DateTime.Now,
+                Product = product,
+                Quantity = 1,
+                CartId = dto.UserId
+            };
+            cart.CartItems.Add(cartItem);
+        }
+        else
+        {
+            cart.CartItems.SingleOrDefault(p => p.Product.Id == dto.ProductId).Quantity++;
+        }
+        await _cartRepository.UpdateAsync(cart);
+    }
+
+    public async Task CreateAsync(Cart cart)
+    {
+        await _cartRepository.CreateAsync(cart);
+    }
+
+    public async Task DeleteItem(long id)
+    {
+        var cart = _cartRepository.GetAll().SingleOrDefault(c => c.Id == id);
+        await _cartRepository.DeleteAsync(cart);
+    }
+    public async Task DeleteCartItem(CartItem cartItem)
+    {
+        await _cartRepository.DeleteCartItemAsync(cartItem);
+    }
+    public decimal GetTotalPrice(Cart cart)
+    {
+        decimal total = 0;
+        foreach (var cartItem in cart.CartItems)
+        {
+            total += cartItem.Quantity * cartItem.Product.Price;
+        }
+        return total;
+    }
+
+    public Cart GetByUserId(long id)
+    {
+        var cartEntity = _cartRepository.GetAll().FirstOrDefault(cart => cart.UserId == id);
+        var cart = _mapper.Map<Cart>(cartEntity);
+        return cart;
     }
 }

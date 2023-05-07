@@ -1,4 +1,4 @@
-﻿@using GuitarShop.BLL.Models;
+﻿@using GuitarShop.DAL.Entities;
 @model IList<Product>
 @{
     ViewBag.Title = "Index";
@@ -21,7 +21,7 @@
     @foreach (var item in Model)
     {
         <ul style="display: flex; list-style: none; white-space: nowrap;">
-            <img src="~/img/Catalog/@item.FileName" class="rounded-bottom" width="20" height="60" asp-append-version="true" />
+            <img src="~/img/Catalog/@item.ImageData" class="rounded-bottom" width="20" height="60" asp-append-version="true" />
             <li style="margin-right: 10px;"><strong>@item.ProductName</strong></li>
             <li class="text-truncate" style="margin-right: 10px;">@item.ProductDescription</li>
             <strong>Price:</strong><li style="margin-right: 10px;">@item.Price</li>

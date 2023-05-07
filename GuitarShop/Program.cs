@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 internal class Program
 {
     private static void Main(string[] args)
-    {
+   {
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -23,12 +23,12 @@ internal class Program
         });
         builder.Services.AddAutoMapper(typeof(MapperProfile));
         builder.Services.AddScoped<MapperProfile>();
-        builder.Services.AddScoped<IBaseRepository<UserEntity>, UserRepository>();
-        builder.Services.AddScoped<IBaseRepository<ProductEntity>, ProductRepository>();
+        builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
+        builder.Services.AddScoped<IBaseRepository<Product>, ProductRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<IProductService, ProductService>();
-        builder.Services.AddScoped<IBaseRepository<CartEntity>, CartRepository>();
+        builder.Services.AddScoped<ICartRepository, CartRepository>();
         builder.Services.AddScoped<ICartService, CartService>();
 
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>

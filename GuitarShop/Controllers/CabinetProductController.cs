@@ -1,25 +1,26 @@
-﻿using Azure;
-using GuitarShop.BLL.Models;
+﻿using AutoMapper;
 using GuitarShop.BLL.ProductService;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
+using GuitarShop.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GuitarShop.Controllers
 {
     public class CabinetProductController : Controller
     {
         private readonly IProductService _productService;
-        private readonly IBaseRepository<ProductEntity> _prodRepos;
+        private readonly IBaseRepository<Product> _prodRepos;
+        private readonly IMapper _mapper;
 
         public CabinetProductController(
             IProductService productService,
-             IBaseRepository<ProductEntity> prodRepos
-            )
+             IBaseRepository<Product> prodRepos,
+             IMapper mapper)
         {
             _productService = productService;
             _prodRepos = prodRepos;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -31,14 +32,16 @@ namespace GuitarShop.Controllers
         {
             var products = await _productService.GetAllAsync();
             var product = products.FirstOrDefault(p => p.Id == id);
-            return View(product);
+            var model = _mapper.Map<ProductViewModel>(product);
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Product product)
+        public async Task<IActionResult> Edit(ProductViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var product = _mapper.Map<Product>(model);
                 var prod = await _productService.UpdateAsync(product);
                 ViewBag.Message = prod.Description;
                 return View();
@@ -53,12 +56,13 @@ namespace GuitarShop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(ProductViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var product = _mapper.Map<Product>(model);
                 var response = await _productService.CreateAsync(product);
-                ViewBag.Message =  response.Description;
+                ViewBag.Message = response.Description;
                 return View();
             }
             ModelState.AddModelError("", "Wtf");

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.AccountService;
-using GuitarShop.BLL.Models;
 using GuitarShop.BLL.UserService;
+using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

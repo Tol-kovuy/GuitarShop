@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GuitarShop.DAL.Repositories;
 
-public class CartRepository : IBaseRepository<CartEntity>
+public class CartRepository : ICartRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -14,25 +14,31 @@ public class CartRepository : IBaseRepository<CartEntity>
         _context = context;
     }
 
-    public async Task CreateAsync(CartEntity entity)
+    public async Task CreateAsync(Cart entity)
     {
-        await _context.CartEntities.AddAsync(entity);
+        await _context.Carts.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
-    public IQueryable<CartEntity> GetAll()
+    public IQueryable<Cart> GetAll()
     {
-        return _context.CartEntities;
+        var carts = _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product);
+        return carts;
     }
 
-    public async Task UpdateAsync(CartEntity entity)
+    public async Task UpdateAsync(Cart entity)
     {
-        _context.CartEntities.Update(entity);
+        _context.Carts.Update(entity);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteAsync(CartEntity entity)
+    public async Task DeleteCartItemAsync(CartItem entity)
     {
-        _context.Remove(entity);
+        _context.CartItems.Remove(entity);
+        await _context.SaveChangesAsync();
+    }
+    public async Task DeleteAsync(Cart entity)
+    {
+        _context.Carts.Remove(entity);
         await _context.SaveChangesAsync();
     }
 }
