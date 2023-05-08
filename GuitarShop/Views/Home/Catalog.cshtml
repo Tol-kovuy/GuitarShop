@@ -1,5 +1,5 @@
-﻿@using GuitarShop.DAL.Entities;
-@model IList<Product>
+﻿
+@model List<ProductViewModel>
 
 @{
     ViewData["Title"] = "Catalog";
@@ -18,7 +18,7 @@
             <li style="margin-right: 10px;">@item.Price</li>
             <strong>Quantity:</strong>
             <li style="margin-right: 10px;">@item.Quantity</li>
-            <img src="~/img/Catalog/@item.ImageData" class="img-fluid" width="150" height="400" asp-append-version="true" />
+            <img src="~/img/Catalog/@item.FileName" class="img-fluid" width="150" height="400" asp-append-version="true" />
             @if (User.Identity.IsAuthenticated)
             {
                 @using (Html.BeginForm())

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuitarShop", "GuitarShop.csproj", "{D35DECE0-A7A6-4C00-9815-280D16BBA95F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitarShop", "GuitarShop.csproj", "{D35DECE0-A7A6-4C00-9815-280D16BBA95F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuitarShop.DAL", "..\GuitarShop.DAL\GuitarShop.DAL.csproj", "{7C1C5E07-7B13-4CD3-91DA-E16076C8F13E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitarShop.DAL", "..\GuitarShop.DAL\GuitarShop.DAL.csproj", "{7C1C5E07-7B13-4CD3-91DA-E16076C8F13E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuitarShop.BLL", "..\GuitarShop.BLL\GuitarShop.BLL.csproj", "{7D231C1E-393B-44BE-80C8-537387FF7F60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitarShop.BLL", "..\GuitarShop.BLL\GuitarShop.BLL.csproj", "{7D231C1E-393B-44BE-80C8-537387FF7F60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

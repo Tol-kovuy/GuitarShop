@@ -1,40 +1,26 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.Dtos;
-using GuitarShop.BLL.UserService;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using GuitarShop.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GuitarShop.BLL.CartService;
 
 public class CartService : ICartService
 {
     private readonly ICartRepository _cartRepository;
-    private readonly IBaseRepository<User> _userRepository;
-    private readonly IUserService _userService;
     private readonly IBaseRepository<Product> _productRepository;
     private readonly IMapper _mapper;
 
     public CartService(
         ICartRepository cartRepository,
-        IUserService userService,
         IBaseRepository<Product> productRepository,
-        IMapper mapper,
-        IBaseRepository<User> userRepository
+        IMapper mapper
         )
     {
         _cartRepository = cartRepository;
-        _userService = userService;
         _productRepository = productRepository;
         _mapper = mapper;
-        _userRepository = userRepository;
     }
 
     public async Task AddToCart(AddToCartDto dto)

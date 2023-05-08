@@ -1,5 +1,4 @@
-﻿
-using GuitarShop.DAL.Entities;
+﻿using GuitarShop.DAL.Entities;
 
 public class CartItem
 {

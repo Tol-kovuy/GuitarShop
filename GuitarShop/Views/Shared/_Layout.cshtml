@@ -36,7 +36,7 @@
                                 <a class="nav-link" style="margin-top: 38px; color: saddlebrown" asp-controller="Authentication" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" asp-controller="Cart" asp-action="Index"><i class="fas fa-shopping-cart"></i><span class="badge badge-danger"></span>10</a>
+                                <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" asp-controller="Cart" asp-action="Index"><i class="fas fa-shopping-cart"></i>Cart <span id="cart-count" class="badge badge-danger"></span></a>
                             </li>
                         }
                         else
@@ -64,5 +64,15 @@
             &copy; 2023 - GuitarShop - <a asp-area="" asp-controller="Home" asp-action="Catalog">Catalog</a>
         </div>
     </footer>
+    <script>
+        $(function () {
+            $.ajax({
+                url: '@Url.Action("GetCartCount", "Cart")',
+                success: function (count) {
+                    $('#cart-count').text(count);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

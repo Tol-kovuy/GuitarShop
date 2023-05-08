@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace GuitarShop.BLL.ProductService;
@@ -147,7 +146,7 @@ public class ProductService : IProductService
         {
             return new BaseResponse<bool>()
             {
-                Data= false,
+                Data = false,
                 Description = $"Products with id '{product.Id}' was not found.",
                 StatusCode = Enum.StatusCode.ProductNotFound
             };
@@ -156,7 +155,7 @@ public class ProductService : IProductService
         await _productRepository.UpdateAsync(productEntity);
         return new BaseResponse<bool>()
         {
-            StatusCode= Enum.StatusCode.OK,
+            StatusCode = Enum.StatusCode.OK,
             Data = true,
             Description = "Products was updated."
         };

@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace GuitarShop.DAL.Entities;
+﻿namespace GuitarShop.DAL.Entities;
 
 public class Cart
 {

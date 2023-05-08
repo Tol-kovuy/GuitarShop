@@ -2,6 +2,7 @@
 using GuitarShop.BLL.AccountService;
 using GuitarShop.BLL.UserService;
 using GuitarShop.DAL.Entities;
+using GuitarShop.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuitarShop.Controllers;
@@ -25,9 +26,15 @@ public class CabinetUserController : Controller
     public async Task<IActionResult> Index()
     {
         var currentUser = HttpContext.User;
-        var users = await _userService.GetAllAsync();
-        var info = users.FirstOrDefault(u => u.UserName == currentUser.Identity.Name);
-        var collections = new User
+        var usersEntity = await _userService.GetAllAsync();
+        var users = new List<UserViewModel>();
+        foreach (var userEntity in usersEntity)
+        {
+            var user = _mapper.Map<UserViewModel>(userEntity);
+            users.Add(user);
+        }
+        var info = usersEntity.FirstOrDefault(u => u.UserName == currentUser.Identity.Name);
+        var collections = new UserViewModel
         {
             Id = info.Id,
             UserName = info.UserName,
@@ -35,7 +42,8 @@ public class CabinetUserController : Controller
             LastName = info.LastName,
             Email = info.Email,
             Password = info.Password,
-            Role = info.Role
+            Role = info.Role,
+            Users = users
         };
         return View(collections);
     }

@@ -1,4 +1,4 @@
-﻿@model GuitarShop.DAL.Entities.User
+﻿@model UserViewModel
 
 @{
     ViewBag.Title = "User Details";
@@ -19,7 +19,7 @@
             </tr>
         </thead>
         <tbody>
-           @* @foreach (var item in Model.Users)
+            @foreach (var item in Model.Users)
             {
                 <tr>
                     <td>@item.Id</td>
@@ -29,7 +29,7 @@
                     <td>@item.Role</td>
                     <td>@item.Email</td>
                 </tr>
-            }*@
+            }
         </tbody>
     </table>
 }

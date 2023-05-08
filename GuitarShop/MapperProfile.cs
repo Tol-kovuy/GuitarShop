@@ -9,14 +9,17 @@ public class MapperProfile : Profile
     public MapperProfile()
     {
         CreateMap<RegistrationViewModel, User>();
-        CreateMap<AuthenticationViewModel, User>();
-        CreateMap<ProductViewModel, Product>()
+        CreateMap<User, UserViewModel>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))
-            .ForMember(dest => dest.ProductDescription, opt => opt.MapFrom(src => src.ProductDescription))
-            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
-            .ForMember(dest => dest.ImageData, opt => opt.MapFrom(src => UploadFile(src)));
+            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role))
+            .ForMember(dest => dest.Users, opt => opt.Ignore())
+            .ReverseMap();
+        CreateMap<AuthenticationViewModel, User>();
         CreateMap<Product, ProductViewModel>()
            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName))
@@ -25,22 +28,5 @@ public class MapperProfile : Profile
            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
            .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.ImageData))
            .ForMember(dest => dest.ImageData, opt => opt.Ignore());
-    }
-
-    public string UploadFile(ProductViewModel product)
-    {
-        string fileName = null;
-        if (product.ImageData != null)
-        {
-            string uploadDir = Path.Combine("C:/Users/Maxim/Documents/GitHub/GuitarShop/GuitarShop/wwwroot/", "img/Catalog");
-            fileName = Guid.NewGuid().ToString() + "-" + product.ImageData.FileName;
-            string filePath = Path.Combine(uploadDir, fileName);
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                product.ImageData.CopyTo(fileStream);
-            }
-
-        }
-        return fileName;
     }
 }

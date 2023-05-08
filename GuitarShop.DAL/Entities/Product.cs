@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace GuitarShop.DAL.Entities;
+﻿namespace GuitarShop.DAL.Entities;
 
 public class Product
 {

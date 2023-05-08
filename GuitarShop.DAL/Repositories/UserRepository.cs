@@ -1,6 +1,4 @@
 ﻿using GuitarShop.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace GuitarShop.DAL.Repositories;
 
