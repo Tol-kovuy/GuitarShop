@@ -13,11 +13,14 @@ using Microsoft.EntityFrameworkCore;
 internal class Program
 {
     private static void Main(string[] args)
-   {
+    {
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllersWithViews();
-        builder.Services.AddDbContext<ApplicationDbContext>(ServiceLifetime.Transient);
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        });
         builder.Services.AddAutoMapper(typeof(MapperProfile));
         builder.Services.AddScoped<MapperProfile>();
         builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
@@ -36,11 +39,11 @@ internal class Program
 
         var app = builder.Build();
 
-       
+
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
-            
+
             app.UseHsts();
         }
 

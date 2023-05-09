@@ -1,4 +1,5 @@
 ﻿using GuitarShop.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace GuitarShop.DAL.Repositories;
 

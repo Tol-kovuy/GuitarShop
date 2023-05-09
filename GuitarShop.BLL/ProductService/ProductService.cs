@@ -7,12 +7,12 @@ namespace GuitarShop.BLL.ProductService;
 
 public class ProductService : IProductService
 {
-    private readonly IBaseRepository<DAL.Entities.Product> _productRepository;
+    private readonly IBaseRepository<Product> _productRepository;
     private readonly IMapper _mapper;
     private IList<Product> _products;
 
     public ProductService(
-         IBaseRepository<DAL.Entities.Product> productRepository,
+         IBaseRepository<Product> productRepository,
          IMapper mapper
         )
     {
@@ -151,8 +151,7 @@ public class ProductService : IProductService
                 StatusCode = Enum.StatusCode.ProductNotFound
             };
         }
-        var productEntity = _mapper.Map<DAL.Entities.Product>(product);
-        await _productRepository.UpdateAsync(productEntity);
+        await _productRepository.UpdateAsync(product);
         return new BaseResponse<bool>()
         {
             StatusCode = Enum.StatusCode.OK,
