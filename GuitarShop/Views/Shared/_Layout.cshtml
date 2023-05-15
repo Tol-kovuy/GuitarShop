@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - GuitarShop</title>
+    <title>@ViewData["Index"] - GuitarShop</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Подключение CSS-файла FontAwesome -->
     <link rel="stylesheet" href="~/lib/bootstrap/font-awesome.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -36,7 +36,7 @@
                                 <a class="nav-link" style="margin-top: 38px; color: saddlebrown" asp-controller="Authentication" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" asp-controller="Cart" asp-action="Index"><i class="fas fa-shopping-cart"></i>Cart <span id="cart-count" class="badge badge-danger"></span></a>
+                                <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" asp-controller="Cart" asp-action="Index"><i class="fas fa-shopping-cart"></i>Cart @ViewBag.Count<span id="cart-count" class="badge badge-danger"></span></a>
                             </li>
                         }
                         else

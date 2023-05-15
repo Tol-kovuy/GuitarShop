@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.AccountService;
+using GuitarShop.BLL.CartService;
 using GuitarShop.BLL.UserService;
 using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
@@ -7,45 +8,38 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GuitarShop.Controllers;
 
-public class CabinetUserController : Controller
+public class CabinetUserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ICartService _cartService;
     private readonly IAccountService _accountService;
     private readonly IMapper _mapper;
     public CabinetUserController(
         IUserService userService,
         IAccountService accountService,
-        IMapper mapper
-        )
+        IMapper mapper,
+        ICartService cartService) : base(userService, cartService)
     {
         _userService = userService;
         _accountService = accountService;
         _mapper = mapper;
+        _cartService = cartService;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        var currentUser = HttpContext.User;
-        var usersEntity = await _userService.GetAllAsync();
+        var currentUser = GetCurrentUser();
+        var usersEntity = _userService.GetAll(); // НО мне нужно получить всех и сохранить в памяти
         var users = new List<UserViewModel>();
         foreach (var userEntity in usersEntity)
         {
             var user = _mapper.Map<UserViewModel>(userEntity);
             users.Add(user);
         }
-        var info = usersEntity.FirstOrDefault(u => u.UserName == currentUser.Identity.Name);
-        var collections = new UserViewModel
-        {
-            Id = info.Id,
-            UserName = info.UserName,
-            FirstName = info.FirstName,
-            LastName = info.LastName,
-            Email = info.Email,
-            Password = info.Password,
-            Role = info.Role,
-            Users = users
-        };
-        return View(collections);
+        var info = usersEntity.FirstOrDefault(u => u.UserName == currentUser.UserName);
+        var model = _mapper.Map<UserViewModel>(info);
+        model.Users = users;
+        return View(model);
     }
 
     [HttpPost]
@@ -53,8 +47,8 @@ public class CabinetUserController : Controller
     {
         if (ModelState.IsValid)
         {
-            var response = await _userService.DeleteAsync(id);
-            ModelState.AddModelError("", response.Description);
+            await _userService.DeleteAsync(id);
+            ModelState.AddModelError("", "User was deleted.");
         }
 
         return RedirectToAction("Index", "CabinetUser");
@@ -65,12 +59,8 @@ public class CabinetUserController : Controller
     {
         if (ModelState.IsValid)
         {
-            var response = await _userService.CreateAsync(model);
-            if (response.StatusCode == BLL.Enum.StatusCode.OK)
-            {
-                return RedirectToAction("Index", "CabinetUser");
-            }
-            ModelState.AddModelError("", response.Description);
+            await _userService.CreateAsync(model);
+            return RedirectToAction("Index", "CabinetUser");
         }
         return View(model);
     }

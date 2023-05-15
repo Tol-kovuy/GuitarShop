@@ -40,13 +40,9 @@ public class AuthenticationController : Controller
         {
             var user = _mapper.Map<User>(model);
             var response = await _accountService.Login(user);
-            if (response.StatusCode == BLL.Enum.StatusCode.OK)
-            {
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(response.Data));
-                return RedirectToAction("Index", "Home");
-            }
-            ModelState.AddModelError("", response.Description);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(response));
+            return RedirectToAction("Index", "Home");
         }
         return View(model);
     }

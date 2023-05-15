@@ -4,6 +4,7 @@ using GuitarShop.Models;
 
 namespace GuitarShop.Extensions;
 
+// TODO: use interface + DI
 public class MappingImageFile
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
@@ -31,8 +32,8 @@ public class MappingImageFile
         var product = new Product
         {
             Id = model.Id,
-            ProductName = model.ProductName,
-            ProductDescription = model.ProductDescription,
+            Name = model.Name,
+            Description = model.Description,
             Price = model.Price,
             Quantity = model.Quantity,
             ImageData = fileName

@@ -3,11 +3,13 @@ using GuitarShop.BLL.AccountService;
 using GuitarShop.BLL.CartService;
 using GuitarShop.BLL.ProductService;
 using GuitarShop.BLL.UserService;
+using GuitarShop.Controllers;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using GuitarShop.DAL.Repositories;
 using GuitarShop.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 internal class Program
@@ -17,9 +19,12 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllersWithViews();
+        var connectionString = builder.Configuration.GetConnectionString("SQLLocalConnection");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            options.UseSqlServer(connectionString);
+
         });
         builder.Services.AddAutoMapper(typeof(MapperProfile));
         builder.Services.AddScoped<MapperProfile>();
@@ -31,6 +36,7 @@ internal class Program
         builder.Services.AddScoped<ICartRepository, CartRepository>();
         builder.Services.AddScoped<ICartService, CartService>();
         builder.Services.AddScoped<MappingImageFile>();
+        builder.Services.AddScoped<GuitarShop.Controllers.ControllerBase>();
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
         {
             options.LoginPath = new PathString("/Authentication/Login");

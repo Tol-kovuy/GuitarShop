@@ -1,162 +1,135 @@
 ﻿using AutoMapper;
+using GuitarShop.BLL.Exceptions;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace GuitarShop.BLL.ProductService;
+
 
 public class ProductService : IProductService
 {
     private readonly IBaseRepository<Product> _productRepository;
-    private readonly IMapper _mapper;
-    private IList<Product> _products;
+    private readonly ILogger<ProductService> _logger;
 
     public ProductService(
-         IBaseRepository<Product> productRepository,
-         IMapper mapper
+         IBaseRepository<Product> productRepository, 
+         ILogger<ProductService> logger
         )
     {
         _productRepository = productRepository;
-        _mapper = mapper;
+        _logger = logger;
     }
 
-    public async Task<IBaseResponse<Product>> CreateAsync(Product product)
+    public async Task CreateAsync(Product product)
     {
         try
         {
-            var products = await GetAllAsync();
-            var prod = products.FirstOrDefault(p => p.ProductName == product.ProductName);
+            var prod = _productRepository.GetAll().FirstOrDefault(p => p.Name == product.Name);
             if (prod != null)
             {
-                return new BaseResponse<Product>
-                {
-                    Data = product,
-                    Description = $"Products with name '{product.ProductName}' already exist.",
-                    StatusCode = Enum.StatusCode.ProductAlreadyExists
-                };
+                throw new ProductException($"Product witn {product.Name} already exist");
             }
-            var newProduct = _mapper.Map<DAL.Entities.Product>(product);
-            await _productRepository.CreateAsync(newProduct);
-            return new BaseResponse<Product>()
-            {
-                Data = product,
-                StatusCode = Enum.StatusCode.OK,
-                Description = $"Products '{product.ProductName}' added."
-            };
+            await _productRepository.CreateAsync(product);
         }
-        catch (Exception)
+        catch (ProductException ex)
         {
-
+            _logger.LogError(ex.Message);
             throw;
         }
     }
 
-    public async Task<IBaseResponse<bool>> DeleteAsync(int id)
+    public IQueryable<Product> GetAll()
+    {
+        IQueryable<Product> products;
+        try
+        {
+            products = _productRepository.GetAll();
+            if (products == null)
+            {
+                throw new ProductException("No products");
+            }
+        }
+        catch (ProductException ex)
+        {
+            _logger.LogError(ex, "Error", ex);
+            throw;
+        }
+        return products;
+    }
+
+    public async Task DeleteAsync(int id)
     {
         try
         {
-            var products = await GetAllAsync();
-            var prod = products.FirstOrDefault(p => p.Id == id);
+            var prod = _productRepository.GetAll().FirstOrDefault(p => p.Id == id);
             if (prod == null)
             {
-                return new BaseResponse<bool>()
-                {
-                    Data = false,
-                    StatusCode = Enum.StatusCode.ProductNotFound,
-                    Description = $"Products with '{id}' ID not found."
-                };
+                throw new ProductException($"No product with {id} id");
             }
-            var prodEntity = _mapper.Map<DAL.Entities.Product>(prod);
-            await _productRepository.DeleteAsync(prodEntity);
-            return new BaseResponse<bool>()
-            {
-                Data = true,
-                StatusCode = Enum.StatusCode.OK,
-                Description = $"Products '{prod.ProductName}' was deleted."
-            };
+            await _productRepository.DeleteAsync(prod);
         }
-        catch (Exception)
+        catch (ProductException ex)
         {
-
+            _logger.LogError(ex, "Error", ex.Message);
             throw;
         }
     }
 
-    public async Task<IList<Product>> GetAllAsync()
+    public Product GetById(long id)
     {
+        Product product = null;
         try
         {
-            if (_products == null)
+            product = _productRepository.GetAll().FirstOrDefault(product => product.Id == id);
+            if (product == null)
             {
-                _products = new List<Product>();
-                var allprodutsFromDb = await _productRepository.GetAll().ToListAsync();
-                foreach (var product in allprodutsFromDb)
-                {
-                    _products.Add(_mapper.Map<Product>(product));
-                }
+                throw new ProductException($"No product with {id} id");
             }
-            return _products;
         }
-        catch (Exception)
+        catch (ProductException ex)
         {
-
+            _logger.LogError(ex, "Error", ex.Message);
             throw;
         }
-    }
-
-    public async Task<Product> GetByIdAsync(long id)
-    {
-        var products = await GetAllAsync();
-        var product = products.FirstOrDefault(product => product.Id == id);
+       
         return product;
     }
 
-    public async Task<IBaseResponse<IList<Product>>> GetByNameAsync(string name)
+    public IList<Product> GetByName(string name)
     {
         try
         {
-            var products = await GetAllAsync();
-            var prod = products.Where(p => p.ProductName.ToUpperInvariant().ToLower().Contains(name.ToUpperInvariant().ToLower())).ToList();
-            if (prod.Count == 0)
+            var prodList = _productRepository.GetAll().Where(p => p.Name.Contains(name.ToUpperInvariant())).ToList();
+            if (prodList.Count == 0)
             {
-                return new BaseResponse<IList<Product>>()
-                {
-                    StatusCode = Enum.StatusCode.ProductNotFound,
-                    Description = $"No result with '{name}'."
-                };
+                throw new ProductException("Products not found");
             }
-            return new BaseResponse<IList<Product>>()
-            {
-                Data = prod,
-                StatusCode = Enum.StatusCode.OK
-            };
+            return prodList;
         }
-        catch (Exception)
+        catch (ProductException ex)
         {
-
+            _logger.LogError(ex, "Error", ex.Message);
             throw;
         }
     }
 
-    public async Task<IBaseResponse<bool>> UpdateAsync(Product product)
+    public async Task UpdateAsync(Product product)
     {
-        var products = await GetAllAsync();
-        var productExist = products.FirstOrDefault(p => p.Id == product.Id);
-        if (productExist == null)
+        try
         {
-            return new BaseResponse<bool>()
+            var productExist = _productRepository.GetAll().FirstOrDefault(p => p.Id == product.Id);
+            if (productExist == null)
             {
-                Data = false,
-                Description = $"Products with id '{product.Id}' was not found.",
-                StatusCode = Enum.StatusCode.ProductNotFound
-            };
+                throw new ProductException("Product not found");
+            }
+            await _productRepository.UpdateAsync(product);
         }
-        await _productRepository.UpdateAsync(product);
-        return new BaseResponse<bool>()
+        catch (ProductException ex)
         {
-            StatusCode = Enum.StatusCode.OK,
-            Data = true,
-            Description = "Products was updated."
-        };
+            _logger.LogError(ex, "Error", ex.Message);
+            throw;
+        }
     }
 }

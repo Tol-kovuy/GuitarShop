@@ -4,14 +4,12 @@ using GuitarShop.BLL.ProductService;
 using GuitarShop.BLL.UserService;
 using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GuitarShop.Controllers;
 
-public class HomeController : Controller
+public class HomeController : ControllerBase
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IProductService _productService;
@@ -19,55 +17,57 @@ public class HomeController : Controller
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
 
-   public HomeController(
+    public HomeController(
         ILogger<HomeController> logger,
         IProductService productService,
         ICartService cartService,
         IUserService userService,
         IMapper mapper
-        )
+        ) : base(userService, cartService)
     {
         _logger = logger;
         _productService = productService;
         _cartService = cartService;
         _userService = userService;
-        _mapper = mapper;   
+        _mapper = mapper;
     }
-    
-    public IActionResult Index() 
+
+    public IActionResult Index()
     {
+        var count = GetProductCounter();
+        ViewBag.Count = count;
         return View();
     }
+
     [HttpPost]
-    public async Task<IActionResult> Index(string query)
+    public IActionResult Index(string query)
     {
         if (!String.IsNullOrEmpty(query))
         {
-            var search = await _productService.GetByNameAsync(query);
-            
-            var list = search.Data;
-            if (list != null)
+            var search = _productService.GetByName(query);
+            if (search != null)
             {
                 var modelList = new List<ProductViewModel>();
-                ProductViewModel model = new ProductViewModel();
-                foreach ( var product in list ) 
+                foreach (var product in search)
                 {
-                    model = _mapper.Map<ProductViewModel>(product);
+                    var model = _mapper.Map<ProductViewModel>(product);
                     modelList.Add(model);
                 }
-                
+
                 return View(modelList);
             }
-            ViewBag.Message = search.Description;
+            ViewBag.Message = $"No result with ${query} query!";
             return View();
         }
 
         return View("Index");
     }
 
-    public async Task<IActionResult> Catalog()
+    public IActionResult Catalog()
     {
-        var allProducts = await _productService.GetAllAsync();
+        var count = GetProductCounter();
+        ViewBag.Count = count;
+        var allProducts = _productService.GetAll();
         var modelList = new List<ProductViewModel>();
         foreach (var product in allProducts)
         {

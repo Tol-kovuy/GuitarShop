@@ -4,9 +4,9 @@ namespace GuitarShop.BLL.UserService;
 
 public interface IUserService
 {
-    Task<IBaseResponse<User>> CreateAsync(User user);
-    Task<BaseResponse<bool>> DeleteAsync(long id);
-    Task<IList<User>> GetAllAsync();
+    Task CreateAsync(User user);
+    IQueryable<User> GetAll();
+    Task DeleteAsync(long id);
     Task<User> GetByIdAsync(long id);
-    Task<User> GetByNameAsync(string name);
+    User GetByName(string name);
 }

@@ -28,16 +28,21 @@ public class CabinetProductController : Controller
         _mappingProduct = mappingProduct;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        var allProducts = await _productService.GetAllAsync();
-        return View(allProducts);
+        var products =  _productService.GetAll();
+        var modelList = new List<ProductViewModel>();
+        foreach (var product in products)
+        {
+            var model = _mapper.Map<ProductViewModel>(product);
+            modelList.Add(model);
+        }
+        return View(modelList);
     }
 
-    public async Task<IActionResult> Edit(int id)
+    public IActionResult Edit(int id)
     {
-        var products = await _productService.GetAllAsync();
-        var product = products.FirstOrDefault(p => p.Id == id);
+        var product = _productService.GetById(id);
         var model = _mapper.Map<ProductViewModel>(product);
         return View(model);
     }
@@ -48,8 +53,8 @@ public class CabinetProductController : Controller
         if (ModelState.IsValid)
         {
             var product = _mappingProduct.MappingModelToProduct(model);
-            var prod = await _productService.UpdateAsync(product);
-            ViewBag.Message = prod.Description;
+            await _productService.UpdateAsync(product);
+            ViewBag.Message = "Product was update";
             return View();
         }
 
@@ -68,32 +73,32 @@ public class CabinetProductController : Controller
         if (ModelState.IsValid)
         {
             var product = _mappingProduct.MappingModelToProduct(model);
-            var response = await _productService.CreateAsync(product);
-            ViewBag.Message = response.Description;
+            await _productService.CreateAsync(product);
+            ViewBag.Message = "Product was added";
             return View();
         }
         ModelState.AddModelError("", "Wtf");
         return View();
     }
 
-    public async Task<IActionResult> Details(int id)
+    public IActionResult Details(int id)
     {
-        var products = await _productService.GetAllAsync();
-        var product = products.FirstOrDefault(x => x.Id == id);
-        return View(product);
+        var product = _productService.GetById(id);
+        var model = _mapper.Map<ProductViewModel>(product);
+        return View(model);
     }
 
-    public async Task<IActionResult> Delete(int id, bool rez)
+    public IActionResult Delete(int id, bool rez)
     {
-        var products = await _productService.GetAllAsync();
-        var prod = products.FirstOrDefault(x => x.Id == id);
-        return View(prod);
+        var product = _productService.GetById(id);
+        var model = _mapper.Map<ProductViewModel>(product);
+        return View(model);
     }
 
     [HttpPost]
     public async Task<IActionResult> Delete(int id)
     {
-        var response = await _productService.DeleteAsync(id);
+        await _productService.DeleteAsync(id);
         return RedirectToAction("Index");
     }
 }

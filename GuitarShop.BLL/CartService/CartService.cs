@@ -35,8 +35,10 @@ public class CartService : ICartService
                 CartItems = new List<CartItem>()
             };
             await _cartRepository.CreateAsync(newCart);
+
+            cart = newCart;
         }
-        cart = _cartRepository.GetAll().SingleOrDefault(cart => cart.UserId == dto.UserId);
+
         var existProduct = cart.CartItems.SingleOrDefault(p => p.ProductId == dto.ProductId);
         if (existProduct == null)
         {
@@ -52,7 +54,8 @@ public class CartService : ICartService
         }
         else
         {
-            cart.CartItems.SingleOrDefault(p => p.Product.Id == dto.ProductId).Quantity++;
+            // TODO: move to variable // How can i do this?
+            cart.CartItems.SingleOrDefault(cartItem => cartItem.Product.Id == dto.ProductId).Quantity++;
         }
         await _cartRepository.UpdateAsync(cart);
     }
@@ -69,22 +72,14 @@ public class CartService : ICartService
     }
     public async Task DeleteCartItem(CartItem cartItem)
     {
+        var cart = _cartRepository.GetAll().SingleOrDefault(c => c.Id == cartItem.CartId);
+        await _cartRepository.UpdateAsync(cart);
         await _cartRepository.DeleteCartItemAsync(cartItem);
-    }
-    public decimal GetTotalPrice(Cart cart)
-    {
-        decimal total = 0;
-        foreach (var cartItem in cart.CartItems)
-        {
-            total += cartItem.Quantity * cartItem.Product.Price;
-        }
-        return total;
     }
 
     public Cart GetByUserId(long id)
     {
-        var cartEntity = _cartRepository.GetAll().FirstOrDefault(cart => cart.UserId == id);
-        var cart = _mapper.Map<Cart>(cartEntity);
+        var cart = _cartRepository.GetAll().FirstOrDefault(cart => cart.UserId == id);
         return cart;
     }
 }

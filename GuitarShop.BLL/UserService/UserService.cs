@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.Enum;
+using GuitarShop.BLL.Exceptions;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace GuitarShop.BLL.UserService;
 
@@ -10,101 +12,79 @@ public class UserService : IUserService
 {
     private readonly IMapper _mapper;
     private readonly IBaseRepository<User> _userRepository;
+    private readonly ILogger<UserService> _logger;
 
     public UserService(
         IMapper mapper,
-        IBaseRepository<DAL.Entities.User> userRepository
-        )
+        IBaseRepository<User> userRepository,
+        ILogger<UserService> logger)
     {
         _mapper = mapper;
         _userRepository = userRepository;
+        _logger = logger;
     }
 
-    public async Task<IBaseResponse<User>> CreateAsync(User user)
+    public async Task CreateAsync(User user)
     {
         try
         {
-            var allUsers = await GetAllAsync();
-            var userExist = allUsers.FirstOrDefault(u => u.UserName == user.UserName);
+            var userExist = await _userRepository.GetAll().SingleOrDefaultAsync(u => u.UserName == user.UserName);
 
             if (userExist != null)
             {
-                return new BaseResponse<User>()
-                {
-                    Description = $"UserService {user.UserName} already exist.",
-                    StatusCode = StatusCode.UserAlreadyExists
-                };
+                throw new UserException($"UserService {user.UserName} already exist");
             }
-            var newUser = _mapper.Map<DAL.Entities.User>(user);
-            await _userRepository.CreateAsync(newUser);
-            return new BaseResponse<User>()
-            {
-                StatusCode = StatusCode.OK,
-                Description = "Registration was successful!"
-            };
+
+            await _userRepository.CreateAsync(userExist);
         }
-        catch (Exception)
+        catch (UserException ex)
         {
+            _logger.LogError(ex, "Error", ex.Message);
             throw;
         }
+    }
+
+    public IQueryable<User> GetAll()
+    {
+        var users = _userRepository.GetAll();
+        return users;
     }
 
     public async Task<User> GetByIdAsync(long id)
     {
-        var users = await GetAllAsync();
-        var user = users.FirstOrDefault(x => x.Id == id);
+        var user = await _userRepository.GetAll().SingleOrDefaultAsync(x => x.Id == id);
         return user;
     }
 
-    public async Task<IList<User>> GetAllAsync()
-    {
-        var _users = await _userRepository.GetAll().ToListAsync();
-
-        return _users;
-    }
-
-    public async Task<BaseResponse<bool>> DeleteAsync(long id)
+    public async Task DeleteAsync(long id)
     {
         try
         {
-            var allUsers = await GetAllAsync();
-            var user = allUsers.FirstOrDefault(u => u.Id == id);
+            var user = await _userRepository.GetAll().SingleOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
-                return new BaseResponse<bool>()
-                {
-                    Data = false,
-                    StatusCode = StatusCode.UserNotFound,
-                    Description = $"No user with ID: {id}."
-                };
-
+                throw new UserException($"No user with ID: {id}.");
             }
             var userToEntity = _mapper.Map<DAL.Entities.User>(user);
-            await _userRepository.DeleteAsync(userToEntity);
-            return new BaseResponse<bool>()
-            {
-                Data = true,
-                StatusCode = StatusCode.OK,
-                Description = $"User with ID: {id} was deleted."
-            };
+            await _userRepository.DeleteAsync(user);
         }
-        catch (Exception)
+        catch (UserException ex)
         {
+            _logger.LogError(ex, "Error", ex.Message);
             throw;
         }
     }
 
-    public async Task<User> GetByNameAsync(string name)
+    public User GetByName(string name)
     {
-
         try
         {
-            var users = await GetAllAsync();
-            return users.FirstOrDefault(user => user.UserName == name);
+            var user = _userRepository.GetAll().SingleOrDefault(user => user.UserName == name);
+            return user;
         }
-        catch (Exception)
+        catch (UserException ex)
         {
-
+            _logger.LogError(ex, "Error", ex.Message);
             throw;
         }
     }

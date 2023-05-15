@@ -1,5 +1,6 @@
 ﻿namespace GuitarShop.BLL.Enum;
 
+// TODO: KeyNotFoundException
 public enum StatusCode
 {
     UserNotFound = 0,

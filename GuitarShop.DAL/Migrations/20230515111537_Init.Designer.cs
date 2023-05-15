@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuitarShop.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230505200721_Initial")]
-    partial class Initial
+    [Migration("20230515111537_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,26 +25,7 @@ namespace GuitarShop.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GuitarShop.DAL.Entities.Cart", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("GuitarShop.DAL.Entities.CartItem", b =>
+            modelBuilder.Entity("CartItem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,6 +57,25 @@ namespace GuitarShop.DAL.Migrations
                     b.ToTable("CartItems");
                 });
 
+            modelBuilder.Entity("GuitarShop.DAL.Entities.Cart", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Carts");
+                });
+
             modelBuilder.Entity("GuitarShop.DAL.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -84,17 +84,17 @@ namespace GuitarShop.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageData")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ProductDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -124,7 +124,7 @@ namespace GuitarShop.DAL.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
+                    b.Property<int>("RoleType")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -135,16 +135,7 @@ namespace GuitarShop.DAL.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GuitarShop.DAL.Entities.Cart", b =>
-                {
-                    b.HasOne("GuitarShop.DAL.Entities.User", null)
-                        .WithOne("Cart")
-                        .HasForeignKey("GuitarShop.DAL.Entities.Cart", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GuitarShop.DAL.Entities.CartItem", b =>
+            modelBuilder.Entity("CartItem", b =>
                 {
                     b.HasOne("GuitarShop.DAL.Entities.Cart", null)
                         .WithMany("CartItems")
@@ -157,6 +148,15 @@ namespace GuitarShop.DAL.Migrations
                         .HasForeignKey("ProductId1");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("GuitarShop.DAL.Entities.Cart", b =>
+                {
+                    b.HasOne("GuitarShop.DAL.Entities.User", null)
+                        .WithOne("Cart")
+                        .HasForeignKey("GuitarShop.DAL.Entities.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GuitarShop.DAL.Entities.Cart", b =>
