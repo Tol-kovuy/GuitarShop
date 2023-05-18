@@ -1,7 +1,7 @@
 ﻿
-@model List<ProductViewModel> 
 @{
     ViewBag.Title = "Index";
+    var query = ViewData["query"] as List<ProductViewModel>;
 }
 
 <div class="form-group">
@@ -16,9 +16,11 @@
 </div>
 <h1>@ViewBag.Message</h1>
 
-@if (Model != null && Model.Any())
+@*@if (Model != null && Model.Any())
+{*@
+    @if (query != null)
 {
-    @foreach (var item in Model)
+    @foreach (var item in query)
     {
         <ul style="display: flex; list-style: none; white-space: nowrap;">
             <img src="~/img/Catalog/@item.FileName" class="rounded-bottom" width="20" height="60" asp-append-version="true" />
@@ -28,4 +30,7 @@
             <strong>Quantity:</strong><li style="margin-right: 10px;">@item.Quantity</li>
         </ul>
     }
+
 }
+@*}*@
+

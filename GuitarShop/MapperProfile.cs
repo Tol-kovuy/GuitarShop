@@ -27,7 +27,11 @@ public class MapperProfile : Profile
            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
            .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.ImageData))
-           .ForMember(dest => dest.ImageData, opt => opt.Ignore());
+           .ForMember(dest => dest.ImageData, opt => opt.Ignore())
+           .ForPath(dest => dest.Category.Id, opt => opt.MapFrom(src => src.Category.Id))
+           .ForPath(dest => dest.Category.Name, opt => opt.MapFrom(src => src.Category.Name))
+           .ForPath(dest => dest.Category.Description, opt => opt.MapFrom(src => src.Category.Description))
+           .ReverseMap();
         CreateMap<Cart, CartViewModel>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.ProductCounter, opt => opt.MapFrom(src => src.CountItems))
@@ -42,5 +46,6 @@ public class MapperProfile : Profile
             .ForPath(dest => dest.Product.Description, opt => opt.MapFrom(src => src.Product.Description))
             .ForPath(dest => dest.Product.FileName, opt => opt.MapFrom(src => src.Product.ImageData))
             .ForPath(dest => dest.Product.Quantity, opt => opt.MapFrom(src => src.Product.Quantity));
+        CreateMap<Category, CategoryViewModel>().ReverseMap();
     }
 }

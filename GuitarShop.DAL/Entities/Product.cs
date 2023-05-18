@@ -1,6 +1,6 @@
 ﻿namespace GuitarShop.DAL.Entities;
 
-// TODO: rename fix
+
 public class Product
 {
     public int Id { get; set; }
@@ -9,4 +9,6 @@ public class Product
     public decimal Price { get; set; }
     public int Quantity { get; set; }
     public string ImageData { get; set; }
+    public long CategoryId { get; set; }
+    public virtual Category Category { get; set; }
 }

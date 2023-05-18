@@ -1,19 +1,35 @@
 ﻿using AutoMapper;
+using GuitarShop.BLL.CartService;
+using GuitarShop.BLL.CategoryService;
+using GuitarShop.BLL.UserService;
+using GuitarShop.Controllers;
 using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
 
 namespace GuitarShop.Extensions;
 
 // TODO: use interface + DI
-public class MappingImageFile
+public class MappingImageFile : ControllerBase
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly IUserService _userService;
+    private readonly ICartService _cartService;
+    private readonly ICategoryService _categoryService;
+    private readonly IMapper _mapper;
 
     public MappingImageFile(
-        IWebHostEnvironment webHostEnvironment
-        )
+        IWebHostEnvironment webHostEnvironment,
+        IUserService userService,
+        ICartService cartService,
+        ICategoryService categoryService,
+        IMapper mapper
+        ) : base(userService, cartService, categoryService, mapper)
     {
         _webHostEnvironment = webHostEnvironment;
+        _userService = userService;
+        _cartService = cartService;
+        _categoryService = categoryService;
+        _mapper = mapper;
     }
 
     public Product MappingModelToProduct(ProductViewModel model)
@@ -36,8 +52,24 @@ public class MappingImageFile
             Description = model.Description,
             Price = model.Price,
             Quantity = model.Quantity,
-            ImageData = fileName
+            ImageData = fileName,
+            CategoryId = SetCategory(model.Category).Id
         };
         return product;
+    }
+
+    public Category SetCategory(CategoryViewModel model)
+    {
+        var categories = GetCategory();
+        Category result = null;
+        foreach (var category in categories)
+        {
+            if (model.Name != category.Name)
+            {
+                continue;
+            }
+            result = _mapper.Map<Category>(category);
+        }
+        return result;
     }
 }

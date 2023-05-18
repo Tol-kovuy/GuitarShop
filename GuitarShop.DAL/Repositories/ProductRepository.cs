@@ -22,7 +22,7 @@ public class ProductRepository : IBaseRepository<Product>
 
     public IQueryable<Product> GetAll()
     {
-        return _context.Products;
+        return _context.Products.Include(c => c.Category);
     }
 
     public async Task UpdateAsync(Product entity)
@@ -35,5 +35,4 @@ public class ProductRepository : IBaseRepository<Product>
         _context.Products.Remove(entity);
         await _context.SaveChangesAsync();
     }
-
 }

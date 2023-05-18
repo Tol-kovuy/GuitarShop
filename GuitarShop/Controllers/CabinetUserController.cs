@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.AccountService;
 using GuitarShop.BLL.CartService;
+using GuitarShop.BLL.CategoryService;
 using GuitarShop.BLL.UserService;
 using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
@@ -13,17 +14,22 @@ public class CabinetUserController : ControllerBase
     private readonly IUserService _userService;
     private readonly ICartService _cartService;
     private readonly IAccountService _accountService;
+    private readonly ICategoryService _categoryService;
+
     private readonly IMapper _mapper;
     public CabinetUserController(
         IUserService userService,
         IAccountService accountService,
         IMapper mapper,
-        ICartService cartService) : base(userService, cartService)
+        ICartService cartService,
+        ICategoryService categoryService
+        ) : base(userService, cartService, categoryService, mapper)
     {
         _userService = userService;
         _accountService = accountService;
         _mapper = mapper;
         _cartService = cartService;
+        _categoryService = categoryService;
     }
 
     public IActionResult Index()

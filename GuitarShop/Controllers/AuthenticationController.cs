@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.AccountService;
+using GuitarShop.BLL.CartService;
+using GuitarShop.BLL.CategoryService;
+using GuitarShop.BLL.ProductService;
 using GuitarShop.BLL.UserService;
+using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
+using GuitarShop.Extensions;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -10,26 +15,42 @@ using System.Security.Claims;
 
 namespace GuitarShop.Controllers;
 
-public class AuthenticationController : Controller
+public class AuthenticationController : ControllerBase
 {
-    private readonly IUserService _userService;
-    private readonly IAccountService _accountService;
+    private readonly IProductService _productService;
+    private readonly IBaseRepository<Product> _productRepos;
     private readonly IMapper _mapper;
+    private readonly MappingImageFile _mappingProduct;
+    private readonly IUserService _userService;
+    private readonly ICartService _cartService;
+    private readonly ICategoryService _categoryService;
+    private readonly IAccountService _accountService;
 
     public AuthenticationController(
+        IProductService productService,
+        IBaseRepository<Product> prodRepos,
+        IMapper mapper,
+        MappingImageFile mappingProduct,
         IUserService userService,
-        IAccountService accountService,
-        IMapper mapper
-        )
+        ICartService cartService,
+        ICategoryService categoryService,
+        IAccountService accountService) 
+        : base(userService, cartService, categoryService, mapper)
     {
-        _userService = userService;
-        _accountService = accountService;
+        _productService = productService;
+        _productRepos = prodRepos;
         _mapper = mapper;
+        _mappingProduct = mappingProduct;
+        _userService = userService;
+        _cartService = cartService;
+        _categoryService = categoryService;
+        _accountService = accountService;
     }
 
     [HttpGet]
     public IActionResult Login()
     {
+        ViewData["Categories"] = GetCategory();
         return View();
     }
 

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.CartService;
+using GuitarShop.BLL.CategoryService;
 using GuitarShop.BLL.ProductService;
 using GuitarShop.BLL.UserService;
-using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -16,26 +16,33 @@ public class HomeController : ControllerBase
     private readonly ICartService _cartService;
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly ICategoryService _categoryService;
 
     public HomeController(
         ILogger<HomeController> logger,
         IProductService productService,
         ICartService cartService,
         IUserService userService,
-        IMapper mapper
-        ) : base(userService, cartService)
+        IMapper mapper,
+        ICategoryService categoryService
+        ) : base(userService, cartService, categoryService, mapper)
     {
         _logger = logger;
         _productService = productService;
         _cartService = cartService;
         _userService = userService;
         _mapper = mapper;
+        _categoryService = categoryService;
     }
 
     public IActionResult Index()
     {
-        var count = GetProductCounter();
-        ViewBag.Count = count;
+        if (User.IsInRole("User"))
+        {
+            var count = GetProductCounter();
+            ViewBag.Count = count;
+        }
+        ViewData["Categories"] = GetCategory();
         return View();
     }
 
@@ -53,9 +60,11 @@ public class HomeController : ControllerBase
                     var model = _mapper.Map<ProductViewModel>(product);
                     modelList.Add(model);
                 }
-
+                ViewData["Categories"] = GetCategory();
+                ViewData["query"] = modelList;
                 return View(modelList);
             }
+            
             ViewBag.Message = $"No result with ${query} query!";
             return View();
         }
@@ -63,10 +72,13 @@ public class HomeController : ControllerBase
         return View("Index");
     }
 
-    public IActionResult Catalog()
+    public IActionResult Catalog(List<ProductViewModel> prod)
     {
         var count = GetProductCounter();
-        ViewBag.Count = count;
+        if (count != default)
+        {
+            ViewBag.Count = count;
+        }
         var allProducts = _productService.GetAll();
         var modelList = new List<ProductViewModel>();
         foreach (var product in allProducts)
@@ -74,8 +86,24 @@ public class HomeController : ControllerBase
             var model = _mapper.Map<ProductViewModel>(product);
             modelList.Add(model);
         }
+        ViewData["Categories"] = GetCategory();
         return View(modelList);
     }
+
+    public IActionResult NavigationMenu()
+    {
+        var categories = _categoryService.GetAll();
+        var modelList = new List<CategoryViewModel>();
+        foreach (var category in categories)
+        {
+            var model = _mapper.Map<CategoryViewModel>(category);
+            modelList.Add(model);
+        }
+        ViewBag.Cotegories = GetCategory();
+        return PartialView("NavigationMenu", modelList);
+    }
+
+   
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

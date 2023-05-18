@@ -1,36 +1,49 @@
 ﻿using AutoMapper;
+using GuitarShop.BLL.CartService;
+using GuitarShop.BLL.CategoryService;
 using GuitarShop.BLL.ProductService;
+using GuitarShop.BLL.UserService;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using GuitarShop.Extensions;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GuitarShop.Controllers;
 
-public class CabinetProductController : Controller
+public class CabinetProductController : ControllerBase
 {
     private readonly IProductService _productService;
-    private readonly IBaseRepository<Product> _prodRepos;
+    private readonly IBaseRepository<Product> _productRepos;
     private readonly IMapper _mapper;
-    private readonly MappingImageFile _mappingProduct; 
+    private readonly MappingImageFile _mappingProduct;
+    private readonly IUserService _userService;
+    private readonly ICartService _cartService;
+    private readonly ICategoryService _categoryService;
 
     public CabinetProductController(
         IProductService productService,
-         IBaseRepository<Product> prodRepos,
-         IMapper mapper,
-         MappingImageFile mappingProduct
-        )
+        IBaseRepository<Product> prodRepos,
+        IMapper mapper,
+        MappingImageFile mappingProduct,
+        IUserService userService,
+        ICartService cartService,
+        ICategoryService categoryService
+        ) : base(userService, cartService, categoryService, mapper)
     {
         _productService = productService;
-        _prodRepos = prodRepos;
+        _productRepos = prodRepos;
         _mapper = mapper;
         _mappingProduct = mappingProduct;
+        _userService = userService;
+        _cartService = cartService;
+        _categoryService = categoryService;
     }
 
     public IActionResult Index()
     {
-        var products =  _productService.GetAll();
+        var products = _productService.GetAll();
         var modelList = new List<ProductViewModel>();
         foreach (var product in products)
         {
@@ -64,6 +77,8 @@ public class CabinetProductController : Controller
     [HttpGet]
     public IActionResult Create()
     {
+        var categories = GetCategory();
+        ViewBag.list = categories.Select(x => x.Name);
         return View();
     }
 
@@ -75,7 +90,6 @@ public class CabinetProductController : Controller
             var product = _mappingProduct.MappingModelToProduct(model);
             await _productService.CreateAsync(product);
             ViewBag.Message = "Product was added";
-            return View();
         }
         ModelState.AddModelError("", "Wtf");
         return View();

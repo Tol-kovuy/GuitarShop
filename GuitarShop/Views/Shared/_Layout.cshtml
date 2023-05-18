@@ -1,4 +1,8 @@
-﻿
+﻿@{
+    var categories = ViewData["Categories"] as List<CategoryViewModel>;
+}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +14,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GuitarShop.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.1/css/bootstrap.min.css" integrity="sha512-6KY5s6UI5J7SVYuZB4S/CZMyPylqyyNZco376NM2Z8Sb8OxEdp02e1jkKk/wZxIEmjQ6DRCEBhni+gpr9c4tvA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.4.0/css/bootstrap.min.css" integrity="sha512-example" crossorigin="anonymous">
 </head>
 <body>
     <header>
@@ -21,9 +27,32 @@
                         <li class="nav-item">
                             <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i>Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" style="margin-top: 38px; color: saddlebrown" asp-controller="Home" asp-action="Catalog"><i class="fas fa-guitar"></i>Catalog</a>
+
+                        <li class="nav-item dropdown">
+                            <a href="#" id="menu" data-bs-toggle="dropdown" class="nav-link dropdown-toggle" style="margin-top: 38px; color: saddlebrown"><i class="fas fa-guitar"></i>Catalog</a>
+                            <ul class="dropdown-menu">
+                                @if (categories != null)
+                                {
+                                    @foreach (var category in categories)
+                                    {
+                                        <li class="dropdown-submenu">
+                                            <a class="dropdown-item dropdown-toggle" style="color: saddlebrown" href="@Url.Action("GetProductsByCategory", "NavigationMenu", new { id = category.Id })">@category.Name</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" style="color: saddlebrown" href="#"></a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="dropdown-submenu">
+                                    <a class="nav-link active" style="color: saddlebrown" asp-controller="Home" asp-action="Catalog">All Guitars</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" style="color: saddlebrown" href="#"></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/logo.bmp" alt="Home icon" width="100" height="80" /></a>
                         </li>
@@ -61,18 +90,12 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - GuitarShop - <a asp-area="" asp-controller="Home" asp-action="Catalog">Catalog</a>
+            2023 - GuitarShop - <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
         </div>
     </footer>
-    <script>
-        $(function () {
-            $.ajax({
-                url: '@Url.Action("GetCartCount", "Cart")',
-                success: function (count) {
-                    $('#cart-count').text(count);
-                }
-            });
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.4.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.1/js/bootstrap.min.js" integrity="sha512-ewfXo9Gq53e1q1+WDTjaHAGZ8UvCWq0eXONhwDuIoaH8xz2r96uoAYaQCm1oQhnBfRXrvJztNXFsTloJfgbL5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 </html>

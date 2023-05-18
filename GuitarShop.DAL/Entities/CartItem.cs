@@ -8,7 +8,7 @@ public class CartItem
     public int Quantity { get; set; }
     public DateTime CreatedDate { get; set; }
     
-    public long ProductId { get; set; }
+    //public long ProductId { get; set; }
 
     public virtual Product Product { get; set; }
 }

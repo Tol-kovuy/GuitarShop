@@ -20,3 +20,18 @@ body {
     color: #000;
     background-color: #f7f7f7;
 }
+
+
+.dropdown-submenu {
+    position: relative;
+}
+
+    .dropdown-submenu .dropdown-menu {
+        top: 10%;
+        left: 100%;
+        margin-top: -1px;
+    }
+
+.navbar-nav li:hover > ul.dropdown-menu {
+    display: block;
+}

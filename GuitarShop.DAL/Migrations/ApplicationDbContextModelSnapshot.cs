@@ -36,10 +36,7 @@ namespace GuitarShop.DAL.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("ProductId1")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -49,7 +46,7 @@ namespace GuitarShop.DAL.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("ProductId1");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartItems");
                 });
@@ -73,6 +70,25 @@ namespace GuitarShop.DAL.Migrations
                     b.ToTable("Carts");
                 });
 
+            modelBuilder.Entity("GuitarShop.DAL.Entities.Category", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("GuitarShop.DAL.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -80,6 +96,9 @@ namespace GuitarShop.DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -97,6 +116,8 @@ namespace GuitarShop.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -142,7 +163,7 @@ namespace GuitarShop.DAL.Migrations
 
                     b.HasOne("GuitarShop.DAL.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId1");
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
@@ -156,9 +177,25 @@ namespace GuitarShop.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GuitarShop.DAL.Entities.Product", b =>
+                {
+                    b.HasOne("GuitarShop.DAL.Entities.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("GuitarShop.DAL.Entities.Cart", b =>
                 {
                     b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("GuitarShop.DAL.Entities.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("GuitarShop.DAL.Entities.User", b =>

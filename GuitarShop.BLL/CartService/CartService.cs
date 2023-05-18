@@ -39,12 +39,12 @@ public class CartService : ICartService
             cart = newCart;
         }
 
-        var existProduct = cart.CartItems.SingleOrDefault(p => p.ProductId == dto.ProductId);
+        var existProduct = cart.CartItems.SingleOrDefault(p => p.Product.Id == dto.ProductId);
         if (existProduct == null)
         {
             var cartItem = new CartItem
             {
-                ProductId = dto.ProductId,
+                //ProductId = dto.ProductId,
                 CreatedDate = DateTime.Now,
                 Product = product,
                 Quantity = 1,
@@ -73,7 +73,7 @@ public class CartService : ICartService
     public async Task DeleteCartItem(CartItem cartItem)
     {
         var cart = _cartRepository.GetAll().SingleOrDefault(c => c.Id == cartItem.CartId);
-        await _cartRepository.UpdateAsync(cart);
+        //await _cartRepository.UpdateAsync(cart);
         await _cartRepository.DeleteCartItemAsync(cartItem);
     }
 

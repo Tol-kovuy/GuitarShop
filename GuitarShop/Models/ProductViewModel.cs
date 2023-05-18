@@ -1,4 +1,6 @@
-﻿namespace GuitarShop.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace GuitarShop.Models;
 
 public class ProductViewModel
 {
@@ -9,4 +11,5 @@ public class ProductViewModel
     public int Quantity { get; set; }
     public string FileName { get; set; }
     public IFormFile ImageData { get; set; }
+    public CategoryViewModel Category { get; set; }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.CartService;
+using GuitarShop.BLL.CategoryService;
 using GuitarShop.BLL.Dtos;
 using GuitarShop.BLL.ProductService;
 using GuitarShop.BLL.UserService;
@@ -14,17 +15,21 @@ public class CartController : ControllerBase
     private readonly IUserService _userService;
     private readonly ICartService _cartService;
     private readonly IProductService _productService;
+    private readonly ICategoryService _categoryService;
 
     public CartController(
         IUserService userService,
         ICartService cartService,
         IProductService productService,
-        IMapper mapper) : base(userService, cartService)
+        IMapper mapper,
+        ICategoryService categoryService
+        ) : base(userService, cartService, categoryService, mapper)
     {
         _userService = userService;
         _cartService = cartService;
         _productService = productService;
         _mapper = mapper;
+        _categoryService = categoryService;
     }
 
     public IActionResult Index()
@@ -66,7 +71,7 @@ public class CartController : ControllerBase
     {
         var currentUser = GetCurrentUser();
         var currentCart = _cartService.GetByUserId(currentUser.Id);
-        var findCartItemByProduct = currentCart.CartItems.SingleOrDefault(x => x.ProductId == id);
+        var findCartItemByProduct = currentCart.CartItems.SingleOrDefault(x => x.Product.Id == id);
         await _cartService.DeleteCartItem(findCartItemByProduct);
         return RedirectToAction("Index");
     }
