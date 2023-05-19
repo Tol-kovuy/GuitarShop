@@ -2,9 +2,10 @@
 using GuitarShop.BLL.Dtos;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
-using GuitarShop.DAL.Repositories;
+using GuitarShop.DAL.Repositories.CartRepository;
+using GuitarShop.DAL.Repositories.ProductRepository;
 
-namespace GuitarShop.BLL.CartService;
+namespace GuitarShop.BLL.Servisec.CartService;
 
 public class CartService : ICartService
 {

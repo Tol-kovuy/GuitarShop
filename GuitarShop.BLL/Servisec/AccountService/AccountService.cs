@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.Enum;
 using GuitarShop.BLL.Exceptions;
-using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
 using GuitarShop.DAL.Repositories;
+using GuitarShop.DAL.Repositories.CartRepository;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace GuitarShop.BLL.AccountService;
+namespace GuitarShop.BLL.Servisec.AccountService;
 
 // TODO: use exceptions
 public class AccountService : IAccountService

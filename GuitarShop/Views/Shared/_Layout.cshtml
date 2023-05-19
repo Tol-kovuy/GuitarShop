@@ -30,36 +30,36 @@
 
                         <li class="nav-item dropdown">
                             <a href="#" id="menu" data-bs-toggle="dropdown" class="nav-link dropdown-toggle" style="margin-top: 38px; color: saddlebrown"><i class="fas fa-guitar"></i>Catalog</a>
-                            <ul class="dropdown-menu">
+                            
                                 @if (categories != null)
                                 {
+                                <ul class="dropdown-menu">
                                     @foreach (var category in categories)
                                     {
                                         <li class="dropdown-submenu">
-                                            <a class="dropdown-item dropdown-toggle" style="color: saddlebrown" href="@Url.Action("GetProductsByCategoryName", "NavigationMenu", new { categoryName = category.Name })">
                                                 @if (category.ParentCategoryId == null)
                                                 {
+                                                <a class="dropdown-item dropdown-toggle" style="color: saddlebrown" href="@Url.Action("GetProductsByCategoryName", "NavigationMenu", new { categoryName = category.Name })">
                                                     @category.Name
+                                                </a>
                                                 }
-                                            </a>
-
                                             <ul class="dropdown-menu">
                                                 <li>
-                                                    
-                                                        @{
-                                                            var subCatigories = categories.Where(x => x.ParentCategoryId != null);
-                                                            var subCategory = subCatigories.SingleOrDefault(x => x.ParentCategoryId == category.Id);
-                                                        }
-                                                        @if (subCategory != null)
+                                                    @{
+                                                        var subCatigories = categories.Where(x => x.ParentCategoryId != null);
+                                                        var subCategories = subCatigories.Where(x => x.ParentCategoryId == category.Id);
+                                                    }
+                                                    @if (subCategories != null)
+                                                    {
+                                                        @foreach (var subCategory in subCategories)
                                                         {
-                                                        <a class="dropdown-item" style="color: saddlebrown" href="@Url.Action("GetProductsByCategoryId", "NavigationMenu", new { categoryId = subCategory.Id })">
-                                                            @subCategory.Name
-                                                        </a>
+                                                            <a class="dropdown-item" style="color: saddlebrown" href="@Url.Action("GetProductsByCategoryId", "NavigationMenu", new { categoryId = subCategory.Id })">
+                                                                @subCategory.Name
+                                                            </a>
                                                         }
-                                                    
+                                                    }
                                                 </li>
                                             </ul>
-
                                         </li>
                                     }
                                     <li><hr class="dropdown-divider"></li>
@@ -69,8 +69,8 @@
                                             <li><a class="dropdown-item" style="color: saddlebrown" href="#"></a></li>
                                         </ul>
                                     </li>
+                                </ul>
                                 }
-                            </ul>
                         </li>
 
                         <li class="nav-item">

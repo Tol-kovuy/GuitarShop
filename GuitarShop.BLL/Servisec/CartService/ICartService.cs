@@ -1,7 +1,7 @@
 ﻿using GuitarShop.BLL.Dtos;
 using GuitarShop.DAL.Entities;
 
-namespace GuitarShop.BLL.CartService;
+namespace GuitarShop.BLL.Servisec.CartService;
 
 public interface ICartService
 {

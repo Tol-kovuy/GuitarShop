@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using GuitarShop.BLL.CartService;
-using GuitarShop.BLL.CategoryService;
-using GuitarShop.BLL.ProductService;
-using GuitarShop.BLL.UserService;
+using GuitarShop.BLL.Servisec.CartService;
+using GuitarShop.BLL.Servisec.CategoryService;
+using GuitarShop.BLL.Servisec.ProductService;
+using GuitarShop.BLL.Servisec.UserService;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

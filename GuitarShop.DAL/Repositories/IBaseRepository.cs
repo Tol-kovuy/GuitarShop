@@ -1,4 +1,4 @@
-﻿namespace GuitarShop.DAL;
+﻿namespace GuitarShop.DAL.Repositories;
 
 public interface IBaseRepository<T>
 {

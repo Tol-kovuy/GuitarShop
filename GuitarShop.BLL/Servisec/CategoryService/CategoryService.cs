@@ -1,8 +1,9 @@
 ﻿using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
-using GuitarShop.DAL.Repositories;
+using GuitarShop.DAL.Repositories.CategoryRepository;
+using GuitarShop.DAL.Repositories.ProductRepository;
 
-namespace GuitarShop.BLL.CategoryService;
+namespace GuitarShop.BLL.Servisec.CategoryService;
 
 public class CategoryService : ICategoryService
 {
@@ -16,6 +17,11 @@ public class CategoryService : ICategoryService
     {
         _categoryRepository = categoryRepository;
         _productRepository = productRepository;
+    }
+
+    public async Task AddSubCategoryAsync(Category category)
+    {
+        await _categoryRepository.UpdateAsync(category);
     }
 
     public async Task CreareAsync(Category category)

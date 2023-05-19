@@ -1,6 +1,6 @@
 ﻿using GuitarShop.DAL.Entities;
 
-namespace GuitarShop.DAL.Repositories;
+namespace GuitarShop.DAL.Repositories.CartRepository;
 
 
 public interface ICartRepository : IBaseRepository<Cart>

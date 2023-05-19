@@ -1,7 +1,7 @@
 ﻿using GuitarShop.DAL.Entities;
 using System.Security.Claims;
 
-namespace GuitarShop.BLL.AccountService;
+namespace GuitarShop.BLL.Servisec.AccountService;
 
 public interface IAccountService
 {

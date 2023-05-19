@@ -1,9 +1,9 @@
 ﻿using GuitarShop.BLL.Exceptions;
 using GuitarShop.DAL.Entities;
-using GuitarShop.DAL.Repositories;
+using GuitarShop.DAL.Repositories.ProductRepository;
 using Microsoft.Extensions.Logging;
 
-namespace GuitarShop.BLL.ProductService;
+namespace GuitarShop.BLL.Servisec.ProductService;
 
 
 public class ProductService : IProductService

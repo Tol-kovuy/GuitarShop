@@ -6,7 +6,12 @@
 
 <p>
     <form asp-action="Create" asp-controller="CabinetCategory" method="get">
-        <button type="submit" class="btn btn-outline-primary">Add New Categoryy</button>
+        <button type="submit" class="btn btn-outline-primary">New Categoryy</button>
+    </form>
+</p>
+<p>
+    <form asp-action="AddSubCategory" asp-controller="CabinetCategory" method="get">
+        <button type="submit" class="btn btn-outline-primary">Add SubCategory</button>
     </form>
 </p>
 <p>
@@ -35,6 +40,9 @@
             @Html.DisplayNameFor(model => model.Category.Name)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Category.ParentCategory.Name)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Category.Description)
         </th>
         <th></th>
@@ -60,6 +68,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.ParentCategory.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Description)

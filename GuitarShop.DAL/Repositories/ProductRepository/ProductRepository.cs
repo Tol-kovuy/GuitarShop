@@ -1,7 +1,7 @@
 ﻿using GuitarShop.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace GuitarShop.DAL.Repositories;
+namespace GuitarShop.DAL.Repositories.ProductRepository;
 
 public class ProductRepository : IProductRepository
 {

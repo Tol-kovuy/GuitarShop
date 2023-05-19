@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using GuitarShop.BLL.CartService;
-using GuitarShop.BLL.CategoryService;
-using GuitarShop.BLL.ProductService;
-using GuitarShop.BLL.UserService;
+using GuitarShop.BLL.Servisec.CartService;
+using GuitarShop.BLL.Servisec.CategoryService;
+using GuitarShop.BLL.Servisec.ProductService;
+using GuitarShop.BLL.Servisec.UserService;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
+using GuitarShop.DAL.Repositories.ProductRepository;
 using GuitarShop.Extensions;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace GuitarShop.Controllers;
 public class CabinetProductController : ControllerBase
 {
     private readonly IProductService _productService;
-    private readonly IBaseRepository<Product> _productRepos;
+    private readonly IProductRepository _productRepos;
     private readonly IMapper _mapper;
     private readonly MappingImageFile _mappingProduct;
     private readonly IUserService _userService;
@@ -24,7 +25,7 @@ public class CabinetProductController : ControllerBase
 
     public CabinetProductController(
         IProductService productService,
-        IBaseRepository<Product> prodRepos,
+        IProductRepository prodRepos,
         IMapper mapper,
         MappingImageFile mappingProduct,
         IUserService userService,

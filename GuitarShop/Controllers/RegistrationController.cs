@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using GuitarShop.BLL.AccountService;
-using GuitarShop.BLL.UserService;
+using GuitarShop.BLL.Servisec.AccountService;
+using GuitarShop.BLL.Servisec.UserService;
 using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Authentication;

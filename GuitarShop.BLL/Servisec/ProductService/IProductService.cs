@@ -1,6 +1,6 @@
 ﻿using GuitarShop.DAL.Entities;
 
-namespace GuitarShop.BLL.ProductService;
+namespace GuitarShop.BLL.Servisec.ProductService;
 
 public interface IProductService
 {

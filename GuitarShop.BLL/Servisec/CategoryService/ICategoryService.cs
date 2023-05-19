@@ -1,10 +1,11 @@
 ﻿using GuitarShop.DAL.Entities;
 
-namespace GuitarShop.BLL.CategoryService;
+namespace GuitarShop.BLL.Servisec.CategoryService;
 
 public interface ICategoryService
 {
     Task CreareAsync(Category category);
+    Task AddSubCategoryAsync(Category category);
     Category GetById(long id);
     Category GetByName(string name);
     IQueryable<Category> GetAll();

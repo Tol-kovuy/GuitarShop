@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using GuitarShop.BLL.Enum;
 using GuitarShop.BLL.Exceptions;
-using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
+using GuitarShop.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace GuitarShop.BLL.UserService;
+namespace GuitarShop.BLL.Servisec.UserService;
 
 public class UserService : IUserService
 {
@@ -65,7 +65,7 @@ public class UserService : IUserService
             {
                 throw new UserException($"No user with ID: {id}.");
             }
-            var userToEntity = _mapper.Map<DAL.Entities.User>(user);
+            var userToEntity = _mapper.Map<User>(user);
             await _userRepository.DeleteAsync(user);
         }
         catch (UserException ex)
