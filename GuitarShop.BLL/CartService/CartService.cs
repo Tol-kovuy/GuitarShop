@@ -9,12 +9,12 @@ namespace GuitarShop.BLL.CartService;
 public class CartService : ICartService
 {
     private readonly ICartRepository _cartRepository;
-    private readonly IBaseRepository<Product> _productRepository;
+    private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
 
     public CartService(
         ICartRepository cartRepository,
-        IBaseRepository<Product> productRepository,
+        IProductRepository productRepository,
         IMapper mapper
         )
     {

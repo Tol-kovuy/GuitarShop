@@ -42,9 +42,12 @@ public class ControllerBase : Controller
         if (currentUser != null && User.IsInRole("User"))
         {
             var cart = _cartService.GetByUserId(currentUser.Id);
-            foreach (var cartItem in cart.CartItems)
+            if (cart != null)
             {
-                count += cartItem.Quantity;
+                foreach (var cartItem in cart.CartItems)
+                {
+                    count += cartItem.Quantity;
+                }
             }
         }
         return count;

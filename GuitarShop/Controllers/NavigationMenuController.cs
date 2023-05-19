@@ -45,9 +45,9 @@ public class NavigationMenuController : ControllerBase
         return View(modelList);
     }
 
-    public IActionResult GetProductsByCategory(long id)
+    public IActionResult GetProductsByCategoryId(int categoryId)
     {
-        var products = _productService.GetAll().Where(c => c.Category.Id == id);
+        var products = _productService.GetAll().Where(c => c.Category.Id == categoryId);
         var modelList = new List<ProductViewModel>();
         foreach (var product in products)
         {
@@ -56,5 +56,22 @@ public class NavigationMenuController : ControllerBase
         }
         ViewData["Categories"] = GetCategory();
         return View(modelList);
+    }
+    public IActionResult GetProductsByCategoryName(string categoryName)
+    {
+        var category = _categoryService.GetByName(categoryName);
+        var subCategories = _categoryService.GetAll().Where(parentCategoryId => parentCategoryId.ParentCategoryId == category.Id);
+        var modelList = new List<ProductViewModel>();
+        foreach (var subCategory in subCategories)
+        {
+            var products = _productService.GetByCategoryId(subCategory.Id);
+            foreach (var product in products)
+            {
+                var model = _mapper.Map<ProductViewModel>(product);
+                modelList.Add(model);
+            }
+        }
+        ViewData["Categories"] = GetCategory();
+        return View("GetProductsByCategoryId", modelList);
     }
 }

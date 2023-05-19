@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GuitarShop.DAL.Repositories;
 
-public class ProductRepository : IBaseRepository<Product>
+public class ProductRepository : IProductRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -34,5 +34,11 @@ public class ProductRepository : IBaseRepository<Product>
     {
         _context.Products.Remove(entity);
         await _context.SaveChangesAsync();
+    }
+
+    public IQueryable<Product> GetByCategoryId(int categoryId)
+    {
+        var products = _context.Products.Where(x => x.CategoryId == categoryId);
+        return products;
     }
 }

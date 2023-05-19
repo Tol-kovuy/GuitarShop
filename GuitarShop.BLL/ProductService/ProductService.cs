@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using GuitarShop.BLL.Exceptions;
-using GuitarShop.DAL;
+﻿using GuitarShop.BLL.Exceptions;
 using GuitarShop.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
+using GuitarShop.DAL.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace GuitarShop.BLL.ProductService;
@@ -10,11 +8,11 @@ namespace GuitarShop.BLL.ProductService;
 
 public class ProductService : IProductService
 {
-    private readonly IBaseRepository<Product> _productRepository;
+    private readonly IProductRepository _productRepository;
     private readonly ILogger<ProductService> _logger;
 
     public ProductService(
-         IBaseRepository<Product> productRepository, 
+         IProductRepository productRepository,
          ILogger<ProductService> logger
         )
     {
@@ -93,7 +91,7 @@ public class ProductService : IProductService
             _logger.LogError(ex, "Error", ex.Message);
             throw;
         }
-       
+
         return product;
     }
 
@@ -131,5 +129,11 @@ public class ProductService : IProductService
             _logger.LogError(ex, "Error", ex.Message);
             throw;
         }
+    }
+
+    public IList<Product> GetByCategoryId(int categoryId)
+    {
+        var products = _productRepository.GetByCategoryId(categoryId).ToList();
+        return products;
     }
 }

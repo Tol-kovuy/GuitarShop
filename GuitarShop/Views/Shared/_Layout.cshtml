@@ -36,20 +36,40 @@
                                     @foreach (var category in categories)
                                     {
                                         <li class="dropdown-submenu">
-                                            <a class="dropdown-item dropdown-toggle" style="color: saddlebrown" href="@Url.Action("GetProductsByCategory", "NavigationMenu", new { id = category.Id })">@category.Name</a>
+                                            <a class="dropdown-item dropdown-toggle" style="color: saddlebrown" href="@Url.Action("GetProductsByCategoryName", "NavigationMenu", new { categoryName = category.Name })">
+                                                @if (category.ParentCategoryId == null)
+                                                {
+                                                    @category.Name
+                                                }
+                                            </a>
+
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" style="color: saddlebrown" href="#"></a></li>
+                                                <li>
+                                                    
+                                                        @{
+                                                            var subCatigories = categories.Where(x => x.ParentCategoryId != null);
+                                                            var subCategory = subCatigories.SingleOrDefault(x => x.ParentCategoryId == category.Id);
+                                                        }
+                                                        @if (subCategory != null)
+                                                        {
+                                                        <a class="dropdown-item" style="color: saddlebrown" href="@Url.Action("GetProductsByCategoryId", "NavigationMenu", new { categoryId = subCategory.Id })">
+                                                            @subCategory.Name
+                                                        </a>
+                                                        }
+                                                    
+                                                </li>
                                             </ul>
+
                                         </li>
                                     }
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li class="dropdown-submenu">
+                                        <a class="nav-link active" style="color: saddlebrown" asp-controller="Home" asp-action="Catalog">All Guitars</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" style="color: saddlebrown" href="#"></a></li>
+                                        </ul>
+                                    </li>
                                 }
-                                <li><hr class="dropdown-divider"></li>
-                                <li class="dropdown-submenu">
-                                    <a class="nav-link active" style="color: saddlebrown" asp-controller="Home" asp-action="Catalog">All Guitars</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" style="color: saddlebrown" href="#"></a></li>
-                                    </ul>
-                                </li>
                             </ul>
                         </li>
 
@@ -93,9 +113,11 @@
             2023 - GuitarShop - <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
         </div>
     </footer>
+    @RenderSection("Scripts", required: false)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.4.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.1/js/bootstrap.min.js" integrity="sha512-ewfXo9Gq53e1q1+WDTjaHAGZ8UvCWq0eXONhwDuIoaH8xz2r96uoAYaQCm1oQhnBfRXrvJztNXFsTloJfgbL5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </body>
 </html>

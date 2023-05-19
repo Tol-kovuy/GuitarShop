@@ -2,7 +2,7 @@
 
 namespace GuitarShop.DAL.Repositories;
 
-public class CategoryRepository : IBaseRepository<Category>
+public class CategoryRepository : ICategoryRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -28,6 +28,12 @@ public class CategoryRepository : IBaseRepository<Category>
     {
         var categories = _context.Categories;
         return categories;
+    }
+
+    public Category GetByName(string name)
+    {
+        var category = _context.Categories.SingleOrDefault(c => c.Name == name);
+        return category;
     }
 
     public async Task UpdateAsync(Category entity)

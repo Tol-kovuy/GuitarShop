@@ -78,7 +78,10 @@ public class CabinetProductController : ControllerBase
     public IActionResult Create()
     {
         var categories = GetCategory();
-        ViewBag.list = categories.Select(x => x.Name);
+        var subCategoryList = categories.Where(x => x.ParentCategoryId != null).Select(x => x.Name);
+        ViewBag.subCategoryList = subCategoryList;
+        var categoryList = categories.Where(x => x.ParentCategoryId == null).Select(x => x.Name);
+        ViewBag.categoryList = categoryList;
         return View();
     }
 

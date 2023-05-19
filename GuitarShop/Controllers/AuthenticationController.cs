@@ -6,6 +6,7 @@ using GuitarShop.BLL.ProductService;
 using GuitarShop.BLL.UserService;
 using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
+using GuitarShop.DAL.Repositories;
 using GuitarShop.Extensions;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -18,7 +19,7 @@ namespace GuitarShop.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IProductService _productService;
-    private readonly IBaseRepository<Product> _productRepos;
+    private readonly IProductRepository _productRepos;
     private readonly IMapper _mapper;
     private readonly MappingImageFile _mappingProduct;
     private readonly IUserService _userService;
@@ -28,7 +29,7 @@ public class AuthenticationController : ControllerBase
 
     public AuthenticationController(
         IProductService productService,
-        IBaseRepository<Product> prodRepos,
+        IProductRepository prodRepos,
         IMapper mapper,
         MappingImageFile mappingProduct,
         IUserService userService,

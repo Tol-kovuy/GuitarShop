@@ -30,8 +30,8 @@ internal class Program
         builder.Services.AddAutoMapper(typeof(MapperProfile));
         builder.Services.AddScoped<MapperProfile>();
         builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
-        builder.Services.AddScoped<IBaseRepository<Product>, ProductRepository>();
-        builder.Services.AddScoped<IBaseRepository<Category>, CategoryRepository>();
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<IProductService, ProductService>();

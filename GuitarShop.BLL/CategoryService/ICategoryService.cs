@@ -5,7 +5,8 @@ namespace GuitarShop.BLL.CategoryService;
 public interface ICategoryService
 {
     Task CreareAsync(Category category);
-    IQueryable<Category> GetAll();
     Category GetById(long id);
+    Category GetByName(string name);
+    IQueryable<Category> GetAll();
     IList<Product> GetProductByCotegoryId(long id);
 }

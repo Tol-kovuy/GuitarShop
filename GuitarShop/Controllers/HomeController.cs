@@ -42,7 +42,7 @@ public class HomeController : ControllerBase
             var count = GetProductCounter();
             ViewBag.Count = count;
         }
-        ViewData["Categories"] = GetCategory();
+        ViewData["Categories"] = GetCategory(); // fuuuuuuuuuuuuuck
         return View();
     }
 

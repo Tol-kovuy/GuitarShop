@@ -3,12 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class CartItem
 {
-    public long Id { get; set; }
-    public long CartId { get; set; }
+    public int Id { get; set; }
+    public int CartId { get; set; }
+    public int ProductId { get; set; }
     public int Quantity { get; set; }
     public DateTime CreatedDate { get; set; }
-    
-    //public long ProductId { get; set; }
-
     public virtual Product Product { get; set; }
 }

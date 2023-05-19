@@ -1,16 +1,17 @@
 ﻿using GuitarShop.DAL;
 using GuitarShop.DAL.Entities;
+using GuitarShop.DAL.Repositories;
 
 namespace GuitarShop.BLL.CategoryService;
 
 public class CategoryService : ICategoryService
 {
-    private readonly IBaseRepository<Category> _categoryRepository;
-    private readonly IBaseRepository<Product> _productRepository;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IProductRepository _productRepository;
 
     public CategoryService(
-        IBaseRepository<Category> categoryRepository,
-        IBaseRepository<Product> productRepository
+        ICategoryRepository categoryRepository,
+        IProductRepository productRepository
         )
     {
         _categoryRepository = categoryRepository;
@@ -30,6 +31,12 @@ public class CategoryService : ICategoryService
     public Category GetById(long id)
     {
         var category = _categoryRepository.GetAll().SingleOrDefault(c => c.Id == id);
+        return category;
+    }
+
+    public Category GetByName(string name)
+    {
+        var category = _categoryRepository.GetByName(name);
         return category;
     }
 
