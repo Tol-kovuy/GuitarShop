@@ -3,8 +3,6 @@ using GuitarShop.BLL.Servisec.CategoryService;
 using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
 
 namespace GuitarShop.Controllers
 {
@@ -26,9 +24,9 @@ namespace GuitarShop.Controllers
         {
             var categories = _categoryService.GetAll();
             var listModel = new List<CategoryViewModel>();
-            if (categories == null ) 
+            if (categories == null)
             {
-               return View();
+                return View();
             }
             foreach (var category in categories)
             {
@@ -38,11 +36,12 @@ namespace GuitarShop.Controllers
             ViewBag.List = listModel;
             return View(listModel);
         }
-       
+
         public IActionResult Create()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(CategoryViewModel model)
         {
@@ -69,5 +68,12 @@ namespace GuitarShop.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> DeleteById(int id)
+        {
+            await _categoryService.DeleteById(id);
+            return RedirectToAction("Index");
+        }
+
     }
 }

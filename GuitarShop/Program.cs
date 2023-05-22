@@ -27,8 +27,8 @@ internal class Program
         var connectionString = builder.Configuration.GetConnectionString("SQLLocalConnection");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             options.UseSqlServer(connectionString);
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
         });
         builder.Services.AddAutoMapper(typeof(MapperProfile));

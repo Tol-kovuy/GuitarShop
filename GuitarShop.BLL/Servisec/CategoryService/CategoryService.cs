@@ -2,6 +2,7 @@
 using GuitarShop.DAL.Entities;
 using GuitarShop.DAL.Repositories.CategoryRepository;
 using GuitarShop.DAL.Repositories.ProductRepository;
+using System.Xml;
 
 namespace GuitarShop.BLL.Servisec.CategoryService;
 
@@ -27,6 +28,26 @@ public class CategoryService : ICategoryService
     public async Task CreareAsync(Category category)
     {
         await _categoryRepository.CreateAsync(category);
+    }
+
+    public async Task DeleteById(int id)
+    {
+        var category = GetAll().SingleOrDefault(c => c.Id == id);
+        if(category == null)
+        {
+            throw new Exception($"No category with '{id}' id.");
+        }
+        await _categoryRepository.DeleteAsync(category);
+    }
+
+    public async Task DeleteByNama(string name)
+    {
+        var category = GetAll().SingleOrDefault(c => c.Name == name);
+        if (category == null)
+        {
+            throw new Exception($"No category with '{name}' name.");
+        }
+        await _categoryRepository.DeleteAsync(category);
     }
 
     public IQueryable<Category> GetAll()

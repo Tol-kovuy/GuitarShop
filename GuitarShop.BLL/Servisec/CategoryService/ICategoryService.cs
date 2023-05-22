@@ -10,4 +10,6 @@ public interface ICategoryService
     Category GetByName(string name);
     IQueryable<Category> GetAll();
     IList<Product> GetProductByCotegoryId(long id);
+    Task DeleteById(int id);
+    Task DeleteByNama(string name);
 }

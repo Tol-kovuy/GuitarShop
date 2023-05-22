@@ -1,4 +1,5 @@
 ﻿using GuitarShop.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace GuitarShop.DAL.Repositories.CategoryRepository;
 
@@ -20,7 +21,7 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task DeleteAsync(Category entity)
     {
-        _context.Categories.Remove(entity);
+        RecursiveDelete(entity);
         await _context.SaveChangesAsync();
     }
 
@@ -40,5 +41,29 @@ public class CategoryRepository : ICategoryRepository
     {
         _context.Categories.Update(entity);
         await _context.SaveChangesAsync();
+    }
+
+    private void RecursiveDelete(Category parent)
+    {
+        if (parent.Name != null)
+        {
+            var children = _context.Categories
+                .Include(x => x.ParentCategory)
+                .Where(x => x.ParentCategoryId == parent.Id);
+
+            foreach (var child in children)
+            {
+                RecursiveDelete(child);
+            }
+        }
+        if (parent.ParentCategory != null)
+        {
+            _context.Categories.Remove(parent.ParentCategory);
+            _context.Categories.Remove(parent);
+        }
+        else
+        {
+            _context.Categories.Remove(parent);
+        }
     }
 }

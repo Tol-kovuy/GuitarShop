@@ -6,7 +6,7 @@
 }
 
 
-@Html.ActionLink("Create New Category", "Create")
+@Html.ActionLink("Create New Base Category", "Create")
 <h4>Categories:</h4>
 @if (check != null)
 {
@@ -17,9 +17,10 @@
                 <a>
                     @category.Name
                 </a>
-                @Html.ActionLink("Create SubCategory", "Create", new { id = category.Id })
+                @Html.ActionLink("Create", "Create", new { id = category.Id }) |
+                @Html.ActionLink("Delete", "DeleteById", new { id = category.Id }) 
                 @{
-                    RenderSubCategories(category);
+                    SubCategories(category);
                 }
             </li>
         }
@@ -28,7 +29,7 @@
 
 @functions
 {
-    void RenderSubCategories(CategoryViewModel category)
+    void SubCategories(CategoryViewModel category)
     {
         var check = Model;
         var subCategories = check.Where(c => c.ParentCategoryId == category.Id);
@@ -36,16 +37,17 @@
         if (subCategories.Any())
         {
             <ul>
-                
+
                 @foreach (var subCategory in subCategories)
                 {
                     <li>
                         <a>
                             @subCategory.Name
                         </a>
-                        @Html.ActionLink("Create SubCategory", "Create", new { id = subCategory.Id })
+                        @Html.ActionLink("Create", "Create", new { id = subCategory.Id }) |
+                        @Html.ActionLink("Delete", "DeleteById", new { id = subCategory.Id })
                         @{
-                            RenderSubCategories(subCategory);
+                            SubCategories(subCategory);
                         }
                     </li>
                 }
