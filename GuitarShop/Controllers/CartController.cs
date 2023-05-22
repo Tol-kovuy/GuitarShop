@@ -35,7 +35,10 @@ public class CartController : ControllerBase
     public IActionResult Index()
     {
         var count = GetProductCounter();
-        ViewBag.Count = count;
+        if (count != default)
+        {
+            ViewBag.Count = count;
+        }
         var currentUser = GetCurrentUser();
         var cart = _cartService.GetByUserId(currentUser.Id);
         if (cart == null)

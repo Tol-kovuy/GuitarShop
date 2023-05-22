@@ -35,3 +35,66 @@ body {
 .navbar-nav li:hover > ul.dropdown-menu {
     display: block;
 }
+
+
+
+.question-responce {
+    background: #eef;
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 30px 0;
+}
+
+    .question-responce .question {
+        color: #148590;
+        font-weight: 600;
+        font-size: 20px;
+    }
+
+    .question-responce .responce {
+        display: grid;
+        grid-template-columns: calc(100% - 60px) 60px;
+    }
+
+        .question-responce .responce input {
+            width: 100%;
+        }
+
+        .question-responce .responce .send-responce {
+            background: #1bb1dc;
+            border: 2px solid #0a98c0;
+            transition: 0.2s;
+            color: #eee;
+            cursor: default;
+            text-align: center;
+        }
+
+            .question-responce .responce .send-responce:hover {
+                color: #fff;
+                background: #1f95c2;
+            }
+
+
+.anket-form {
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid #1f95c2;
+}
+
+    .anket-form .send-anket {
+        text-align: center;
+    }
+
+    .anket-form button {
+        text-align: center;
+        padding: 10px;
+        background: #1f95c2;
+        border-radius: 10px;
+        color: #fff;
+    }
+
+        .anket-form button.deactive {
+            background: #ccc;
+            pointer-events: none;
+        }

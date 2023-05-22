@@ -1,0 +1,58 @@
+﻿@model IList<CategoryViewModel>
+
+@{
+    ViewData["Title"] = "Category Info";
+    var check = Model;
+}
+
+
+@Html.ActionLink("Create New Category", "Create")
+<h4>Categories:</h4>
+@if (check != null)
+{
+    <ul>
+        @foreach (var category in check.Where(c => c.ParentCategoryId == null))
+        {
+            <li>
+                <a>
+                    @category.Name
+                </a>
+                @Html.ActionLink("Create SubCategory", "Create", new { id = category.Id })
+                @{
+                    RenderSubCategories(category);
+                }
+            </li>
+        }
+    </ul>
+}
+
+@functions
+{
+    void RenderSubCategories(CategoryViewModel category)
+    {
+        var check = Model;
+        var subCategories = check.Where(c => c.ParentCategoryId == category.Id);
+
+        if (subCategories.Any())
+        {
+            <ul>
+                
+                @foreach (var subCategory in subCategories)
+                {
+                    <li>
+                        <a>
+                            @subCategory.Name
+                        </a>
+                        @Html.ActionLink("Create SubCategory", "Create", new { id = subCategory.Id })
+                        @{
+                            RenderSubCategories(subCategory);
+                        }
+                    </li>
+                }
+            </ul>
+        }
+    }
+}
+
+
+

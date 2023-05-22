@@ -61,19 +61,19 @@
             </div>
         </div>
 
-         <div class="form-group">
+        <div class="form-group">
             @Html.LabelFor(model => model.Category.ParentCategory.Name, "Category", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.Category.ParentCategory.Name, new SelectList(ViewBag.categoryList), "---Select a Category---", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Category.ParentCategory.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-  
+
         <div class="form-group">
-            @Html.LabelFor(model => model.Category, "SubCategory", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Category.Name, "SubCategory", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.Category.Name, new SelectList(ViewBag.subCategoryList), "---Select a SubCategory---", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.Category.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 

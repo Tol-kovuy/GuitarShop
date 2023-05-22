@@ -3,6 +3,8 @@ using GuitarShop.BLL.Servisec.CategoryService;
 using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace GuitarShop.Controllers
 {
@@ -22,60 +24,50 @@ namespace GuitarShop.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var categories = _categoryService.GetAll();
+            var listModel = new List<CategoryViewModel>();
+            if (categories == null ) 
+            {
+               return View();
+            }
+            foreach (var category in categories)
+            {
+                var model = _mapper.Map<CategoryViewModel>(category);
+                listModel.Add(model);
+            }
+            ViewBag.List = listModel;
+            return View(listModel);
         }
-
-        [HttpGet]
+       
         public IActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Create(CategoryViewModel model)
         {
-            if (ModelState.IsValid)
+            var existCategory = _categoryService.GetAll().SingleOrDefault(c => c.Name == model.Name);
+            if (existCategory != null)
             {
-                var entity = _mapper.Map<Category>(model);
-                await _categoryService.CreareAsync(entity);
-                return RedirectToAction("Index", "CabinetProduct");
+                ViewBag.CategoryExist = $"Category with '{model.Name}' name already exist!";
+                return View("Create");
             }
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult AddSubCategory()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddSubCategory(CategoryViewModel model)
-        {
-            if (ModelState.IsValid)
+            if (model.Id != default)
             {
-                Category entityCategory = null;
-                var existCategory = _categoryService.GetByName(model.ParentCategory.Name);
-                var existSubCategories = _categoryService.GetAll().Where(x => x.ParentCategoryId == existCategory.Id);
-                if (existCategory != null)
+                var subCategory = new Category
                 {
-                    var parentCategory = new Category
-                    {
-                        Id = existCategory.Id,
-                        Name = existCategory.Name,
-                        Description = existCategory.Description
-                    };
-                    entityCategory = new Category
-                    {
-                        Name = model.Name,
-                        Description = model.Description,
-                        ParentCategory = parentCategory
-                    };
-                }
-                await _categoryService.AddSubCategoryAsync(entityCategory);
-                return RedirectToAction("Index", "CabinetProduct");
+                    ParentCategoryId = model.Id,
+                    Name = model.Name,
+                    Description = model.Description
+                };
+                await _categoryService.AddSubCategoryAsync(subCategory);
             }
-            return View();
+            else
+            {
+                var entityCategory = _mapper.Map<Category>(model);
+                await _categoryService.CreareAsync(entityCategory);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

@@ -79,10 +79,10 @@ public class CabinetProductController : ControllerBase
     public IActionResult Create()
     {
         var categories = GetCategory();
-        var subCategoryList = categories.Where(x => x.ParentCategoryId != null).Select(x => x.Name);
-        ViewBag.subCategoryList = subCategoryList;
         var categoryList = categories.Where(x => x.ParentCategoryId == null).Select(x => x.Name);
         ViewBag.categoryList = categoryList;
+        var subCategoryList = categories.Where(x => x.ParentCategoryId != null).Select(x => x.Name);
+        ViewBag.subCategoryList = subCategoryList;
         return View();
     }
 
@@ -94,6 +94,12 @@ public class CabinetProductController : ControllerBase
             var product = _mappingProduct.MappingModelToProduct(model);
             await _productService.CreateAsync(product);
             ViewBag.Message = "Product was added";
+            var categories = GetCategory();
+            var categoryList = categories.Where(x => x.ParentCategoryId == null).Select(x => x.Name);
+            ViewBag.categoryList = categoryList;
+            var subCategoryList = categories.Where(x => x.ParentCategoryId != null).Select(x => x.Name);
+            ViewBag.subCategoryList = subCategoryList;
+            return View();
         }
         ModelState.AddModelError("", "Wtf");
         return View();

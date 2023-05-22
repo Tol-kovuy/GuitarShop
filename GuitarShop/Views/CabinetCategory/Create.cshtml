@@ -1,66 +1,16 @@
 ﻿@model CategoryViewModel
 
-@using System.Linq
-@{
-    ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
 
-<h2>Create Categoty</h2>
 
-@using (Html.BeginForm("Create", "CabinetCategory", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "CabinetCategory", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
+    <label for="textInput">Input Category Name</label>
+    <input type="text" id="textInput" name="Name" />
 
-    <div class="form-horizontal">
-        <h4>Category</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <label for="textInput">Input Category Description</label>
+    <input type="text" id="textInput" name="Description" />
 
-        <div class="alert alert-danger">
-            <ul>
-                @ViewBag.Message
-            </ul>
-        </div>
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ParentCategory.Name, "Parent Category Name", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ParentCategory.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ParentCategory.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ParentCategory.Description, "Parent Category Description", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ParentCategory.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ParentCategory.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, "Child Category Name", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, "Child Category Description", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-outline-primary" />
-            </div>
-        </div>
-    </div>
+    <button type="submit">Create</button>
 }
+@ViewBag.CategoryExist
