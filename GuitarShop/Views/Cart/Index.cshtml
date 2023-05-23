@@ -31,10 +31,10 @@ else
     @using (Html.BeginForm())
     {
         <div class="pull-left">
-            <input type="submit" class="btn btn-danger" value="Delete All" asp-controller="Cart" asp-action="CleanCart" />
+            <input type="submit" class="btn btn-danger" value="Delete Cart" asp-controller="Cart" asp-action="CleanCart" />
         </div>
     }
 }
-
-<a href="@Url.Action("Catalog", "Home")">Go to Catalog</a>
-
+<div class="pull-left">
+    <a class="btn btn-dark" href="@Url.Action("Catalog", "Home")">Go to Catalog</a>
+</div>

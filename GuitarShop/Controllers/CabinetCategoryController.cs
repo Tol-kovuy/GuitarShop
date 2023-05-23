@@ -33,7 +33,7 @@ namespace GuitarShop.Controllers
                 var model = _mapper.Map<CategoryViewModel>(category);
                 listModel.Add(model);
             }
-            ViewBag.List = listModel;
+            ViewData["Categories"] = listModel;
             return View(listModel);
         }
 

@@ -29,7 +29,7 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a href="#" id="menu" data-bs-toggle="dropdown" class="nav-link dropdown-toggle" style="margin-top: 38px; color: saddlebrown"><i class="fas fa-guitar"></i>Catalog</a>
+                            <a data-bs-toggle="dropdown" class="nav-link dropdown-toggle" style="margin-top: 38px; color: saddlebrown"><i class="fas fa-guitar"></i>Catalog</a>
 
                             @if (categories != null)
                             {
@@ -40,9 +40,14 @@
                                             <a class="dropdown-item dropdown-toggle" style="color: saddlebrown" href="@Url.Action("GetProductsByCategoryName", "NavigationMenu", new { categoryName = category.Name })">
                                                 @category.Name
                                             </a>
-                                            @{RenderSubCategories(category);}
+                                            @{
+                                                RenderSubCategories(category);
+                                            }
                                         </li>
                                     }
+                                    <li class="dropdown-submenu">
+                                        <a class="dropdown-item dropdown-toggle" style="color: saddlebrown" href="@Url.Action("Catalog", "Home")">All Guitars</a>
+                                    </li>
                                 </ul>
                             }
 
@@ -62,7 +67,9 @@
                                                     <a class="dropdown-item" style="color: saddlebrown" href="@Url.Action("GetProductsByCategoryId", "NavigationMenu", new { categoryId = subCategory.Id })">
                                                         @subCategory.Name
                                                     </a>
-                                                    @{RenderSubCategories(subCategory);}
+                                                    @{
+                                                        RenderSubCategories(subCategory);
+                                                    }
                                                 </li>
                                             }
                                         </ul>
