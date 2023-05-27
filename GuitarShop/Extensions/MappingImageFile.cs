@@ -60,16 +60,21 @@ public class MappingImageFile : ControllerBase
 
     public Category SetCategory(CategoryViewModel model)
     {
-        var categories = GetCategory();
-        Category result = null;
-        foreach (var category in categories)
-        {
-            if (model.Name != category.Name)
-            {
-                continue;
-            }
-            result = _mapper.Map<Category>(category);
-        }
-        return result;
+        var categoryLinq = GetCategory()
+            .Where(n => n.Name == model.Name)
+            .Select(m => _mapper.Map<Category>(m))
+            .FirstOrDefault();
+
+        //var categories = GetCategory();
+        //Category result = null;
+        //foreach (var category in categories)
+        //{
+        //    if (model.Name != category.Name)
+        //    {
+        //        continue;
+        //    }
+        //    result = _mapper.Map<Category>(category);
+        //}
+        return categoryLinq;
     }
 }

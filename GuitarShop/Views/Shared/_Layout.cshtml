@@ -41,7 +41,7 @@
                                                 @category.Name
                                             </a>
                                             @{
-                                                RenderSubCategories(category);
+                                                SubCategories(category);
                                             }
                                         </li>
                                     }
@@ -53,7 +53,7 @@
 
                             @functions
                             {
-                                void RenderSubCategories(CategoryViewModel category)
+                                void SubCategories(CategoryViewModel category)
                                 {
                                     var categories = ViewData["Categories"] as List<CategoryViewModel>;
                                     var subCategories = categories.Where(c => c.ParentCategoryId == category.Id);
@@ -68,7 +68,7 @@
                                                         @subCategory.Name
                                                     </a>
                                                     @{
-                                                        RenderSubCategories(subCategory);
+                                                        SubCategories(subCategory);
                                                     }
                                                 </li>
                                             }

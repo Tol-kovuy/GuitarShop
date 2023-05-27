@@ -48,7 +48,6 @@ public class CategoryRepository : ICategoryRepository
         if (parent.Name != null)
         {
             var children = _context.Categories
-                .Include(x => x.ParentCategory)
                 .Where(x => x.ParentCategoryId == parent.Id);
 
             foreach (var child in children)
@@ -59,7 +58,6 @@ public class CategoryRepository : ICategoryRepository
         if (parent.ParentCategory != null)
         {
             _context.Categories.Remove(parent.ParentCategory);
-            _context.Categories.Remove(parent);
         }
         else
         {

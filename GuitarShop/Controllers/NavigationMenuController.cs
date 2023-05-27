@@ -3,6 +3,7 @@ using GuitarShop.BLL.Servisec.CartService;
 using GuitarShop.BLL.Servisec.CategoryService;
 using GuitarShop.BLL.Servisec.ProductService;
 using GuitarShop.BLL.Servisec.UserService;
+using GuitarShop.DAL.Entities;
 using GuitarShop.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,41 +36,46 @@ public class NavigationMenuController : ControllerBase
     }
     public IActionResult Index()
     {
-        var categories = _categoryService.GetAll();
-        var modelList = new List<CategoryViewModel>();
-        foreach (var category in categories)
-        {
-            var model = _mapper.Map<CategoryViewModel>(category);
-            modelList.Add(model);
-        }
-        return View(modelList);
+        var categoriesLinq = _categoryService.GetAll().Select(m => _mapper.Map<CategoryViewModel>(m)).ToList();
+
+        //var categories = _categoryService.GetAll();
+        //var modelList = new List<CategoryViewModel>();
+        //foreach (var category in categories)
+        //{
+        //    var model = _mapper.Map<CategoryViewModel>(category);
+        //    modelList.Add(model);
+        //}
+        return View(categoriesLinq);
     }
 
     public IActionResult GetProductsByCategoryId(int categoryId)
     {
-        var products = _productService.GetAll().Where(c => c.Category.Id == categoryId);
-        var modelList = new List<ProductViewModel>();
-        foreach (var product in products)
-        {
-            var model = _mapper.Map<ProductViewModel>(product);
-            modelList.Add(model);
-        }
+        var products = _productService.GetAll()
+            .Where(c => c.Category.Id == categoryId)
+            .Select(m => _mapper.Map<ProductViewModel>(m))
+            .ToList();
+
+        //var modelList = new List<ProductViewModel>();
+        //foreach (var product in products)
+        //{
+        //    var model = _mapper.Map<ProductViewModel>(product);
+        //    modelList.Add(model);
+        //}
+
         ViewData["Categories"] = GetCategory();
-        return View(modelList);
+        return View(products);
     }
     public IActionResult GetProductsByCategoryName(string categoryName)
     {
         var category = _categoryService.GetByName(categoryName);
         var subCategories = _categoryService.GetAll().Where(parentCategoryId => parentCategoryId.ParentCategoryId == category.Id);
-        var modelList = new List<ProductViewModel>();
+        List<ProductViewModel> modelList = null;
         foreach (var subCategory in subCategories)
         {
-            var products = _productService.GetByCategoryId(subCategory.Id);
-            foreach (var product in products)
-            {
-                var model = _mapper.Map<ProductViewModel>(product);
-                modelList.Add(model);
-            }
+            modelList = _productService
+                .GetByCategoryId(subCategory.Id)
+                .Select(product => _mapper.Map<ProductViewModel>(product))
+                .ToList();
         }
         ViewData["Categories"] = GetCategory();
         return View("GetProductsByCategoryId", modelList);

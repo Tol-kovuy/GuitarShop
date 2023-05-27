@@ -55,13 +55,19 @@ public class ControllerBase : Controller
 
     public IList<CategoryViewModel> GetCategory()
     {
-        var categories = _categoryService.GetAll();
-        var listModel = new List<CategoryViewModel>();
-        foreach (var category in categories)
-        {
-            var model = _mapper.Map<CategoryViewModel>(category);
-            listModel.Add(model);
-        }
-        return listModel;
+        var modelLinq = _categoryService
+            .GetAll()
+            .Select(category => _mapper.Map<CategoryViewModel>(category))
+            .ToList();
+
+
+        //var categories = _categoryService.GetAll();
+        //var listModel = new List<CategoryViewModel>();
+        //foreach (var category in categories)
+        //{
+        //    var model = _mapper.Map<CategoryViewModel>(category);
+        //    listModel.Add(model);
+        //}
+        return modelLinq;
     }
 }
