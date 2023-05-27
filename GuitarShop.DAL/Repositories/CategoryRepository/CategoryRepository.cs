@@ -58,6 +58,7 @@ public class CategoryRepository : ICategoryRepository
         if (parent.ParentCategory != null)
         {
             _context.Categories.Remove(parent.ParentCategory);
+            _context.Categories.Remove(parent);
         }
         else
         {
