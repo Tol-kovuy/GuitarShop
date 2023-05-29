@@ -78,7 +78,7 @@ public class CabinetProductController : ControllerBase
     [HttpGet]
     public IActionResult Create()
     {
-        var categories = GetCategory();
+        var categories = GetCategories();
         var categoryList = categories.Where(x => x.ParentCategoryId == null).Select(x => x.Name);
         ViewBag.categoryList = categoryList;
         var subCategoryList = categories.Where(x => x.ParentCategoryId != null).Select(x => x.Name);
@@ -94,7 +94,7 @@ public class CabinetProductController : ControllerBase
             var product = _mappingProduct.MappingModelToProduct(model);
             await _productService.CreateAsync(product);
             ViewBag.Message = "Product was added";
-            var categories = GetCategory();
+            var categories = GetCategories();
             var categoryList = categories.Where(x => x.ParentCategoryId == null).Select(x => x.Name);
             ViewBag.categoryList = categoryList;
             var subCategoryList = categories.Where(x => x.ParentCategoryId != null).Select(x => x.Name);

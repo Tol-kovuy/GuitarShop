@@ -39,6 +39,7 @@ public class ControllerBase : Controller
     {
         int count = 0;
         var currentUser = this.GetCurrentUser();
+
         if (currentUser != null && User.IsInRole("User"))
         {
             var cart = _cartService.GetByUserId(currentUser.Id);
@@ -53,21 +54,14 @@ public class ControllerBase : Controller
         return count;
     }
 
-    public IList<CategoryViewModel> GetCategory()
+
+    public IList<CategoryViewModel> GetCategories()
     {
         var modelLinq = _categoryService
             .GetAll()
             .Select(category => _mapper.Map<CategoryViewModel>(category))
             .ToList();
 
-
-        //var categories = _categoryService.GetAll();
-        //var listModel = new List<CategoryViewModel>();
-        //foreach (var category in categories)
-        //{
-        //    var model = _mapper.Map<CategoryViewModel>(category);
-        //    listModel.Add(model);
-        //}
         return modelLinq;
     }
 }

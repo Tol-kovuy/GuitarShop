@@ -36,15 +36,8 @@ public class NavigationMenuController : ControllerBase
     }
     public IActionResult Index()
     {
-        var categoriesLinq = _categoryService.GetAll().Select(m => _mapper.Map<CategoryViewModel>(m)).ToList();
+        var categoriesLinq = GetCategories().Select(m => _mapper.Map<CategoryViewModel>(m)).ToList();
 
-        //var categories = _categoryService.GetAll();
-        //var modelList = new List<CategoryViewModel>();
-        //foreach (var category in categories)
-        //{
-        //    var model = _mapper.Map<CategoryViewModel>(category);
-        //    modelList.Add(model);
-        //}
         return View(categoriesLinq);
     }
 
@@ -55,16 +48,11 @@ public class NavigationMenuController : ControllerBase
             .Select(m => _mapper.Map<ProductViewModel>(m))
             .ToList();
 
-        //var modelList = new List<ProductViewModel>();
-        //foreach (var product in products)
-        //{
-        //    var model = _mapper.Map<ProductViewModel>(product);
-        //    modelList.Add(model);
-        //}
-
-        ViewData["Categories"] = GetCategory();
+        ViewData["Categories"] = GetCategories();
         return View(products);
     }
+
+    // todo use id
     public IActionResult GetProductsByCategoryName(string categoryName)
     {
         var category = _categoryService.GetByName(categoryName);
@@ -77,7 +65,7 @@ public class NavigationMenuController : ControllerBase
                 .Select(product => _mapper.Map<ProductViewModel>(product))
                 .ToList();
         }
-        ViewData["Categories"] = GetCategory();
+        ViewData["Categories"] = GetCategories();
         return View("GetProductsByCategoryId", modelList);
     }
 }

@@ -33,7 +33,7 @@ public class CabinetController : ControllerBase
             var count = GetProductCounter();
             ViewBag.Count = count;
         }
-        ViewData["Categories"] = GetCategory();
+        ViewData["Categories"] = GetCategories();
         var currentUser = GetCurrentUser();
         var user = _userService.GetByName(currentUser.UserName);
         var model = _mapper.Map<UserViewModel>(user);

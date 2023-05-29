@@ -28,6 +28,7 @@ namespace GuitarShop.Controllers
             {
                 return View();
             }
+
             foreach (var category in categories)
             {
                 var model = _mapper.Map<CategoryViewModel>(category);
@@ -46,11 +47,12 @@ namespace GuitarShop.Controllers
         public async Task<IActionResult> Create(CategoryViewModel model)
         {
             var existCategory = _categoryService.GetAll().SingleOrDefault(c => c.Name == model.Name);
-            if (existCategory != null)
+            if (existCategory != null && existCategory.ParentCategoryId == null)
             {
                 ViewBag.CategoryExist = $"Category with '{model.Name}' name already exist!";
                 return View("Create");
             }
+
             if (model.Id != default)
             {
                 var subCategory = new Category
@@ -64,7 +66,7 @@ namespace GuitarShop.Controllers
             else
             {
                 var entityCategory = _mapper.Map<Category>(model);
-                await _categoryService.CreareAsync(entityCategory);
+                await _categoryService.CreateAsync(entityCategory);
             }
             return RedirectToAction("Index");
         }
@@ -74,6 +76,5 @@ namespace GuitarShop.Controllers
             await _categoryService.DeleteById(id);
             return RedirectToAction("Index");
         }
-
     }
 }

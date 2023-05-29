@@ -23,4 +23,11 @@ public class ApplicationDbContext : DbContext
     //{
     //    optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=GuitarShopDb;Trusted_Connection=True;Encrypt=False;MultipleActiveResultSets=true");
     //}
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+        {
+            relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
+    }
 }

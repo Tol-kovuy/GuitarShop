@@ -51,7 +51,7 @@ public class AuthenticationController : ControllerBase
     [HttpGet]
     public IActionResult Login()
     {
-        ViewData["Categories"] = GetCategory();
+        ViewData["Categories"] = GetCategories();
         return View();
     }
 

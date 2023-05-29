@@ -25,7 +25,8 @@ public class CategoryService : ICategoryService
         await _categoryRepository.UpdateAsync(category);
     }
 
-    public async Task CreareAsync(Category category)
+    // todo :rename fix name
+    public async Task CreateAsync(Category category)
     {
         await _categoryRepository.CreateAsync(category);
     }
@@ -40,6 +41,7 @@ public class CategoryService : ICategoryService
         await _categoryRepository.DeleteAsync(category);
     }
 
+    // todo: remove use id
     public async Task DeleteByNama(string name)
     {
         var category = GetAll().SingleOrDefault(c => c.Name == name);

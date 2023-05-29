@@ -43,6 +43,7 @@ public class CategoryRepository : ICategoryRepository
         await _context.SaveChangesAsync();
     }
 
+    // todo: use cascade delete?
     private void RecursiveDelete(Category parent)
     {
         if (parent.Name != null)

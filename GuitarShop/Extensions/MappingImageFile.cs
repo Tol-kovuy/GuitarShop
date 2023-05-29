@@ -53,28 +53,18 @@ public class MappingImageFile : ControllerBase
             Price = model.Price,
             Quantity = model.Quantity,
             ImageData = fileName,
-            CategoryId = SetCategory(model.Category).Id
+            CategoryId = GetCategoty(model.Category).Id
         };
         return product;
     }
 
-    public Category SetCategory(CategoryViewModel model)
+    public Category GetCategoty(CategoryViewModel model)
     {
-        var categoryLinq = GetCategory()
+        var categoryLinq = GetCategories()
             .Where(n => n.Name == model.Name)
             .Select(m => _mapper.Map<Category>(m))
             .FirstOrDefault();
 
-        //var categories = GetCategory();
-        //Category result = null;
-        //foreach (var category in categories)
-        //{
-        //    if (model.Name != category.Name)
-        //    {
-        //        continue;
-        //    }
-        //    result = _mapper.Map<Category>(category);
-        //}
         return categoryLinq;
     }
 }

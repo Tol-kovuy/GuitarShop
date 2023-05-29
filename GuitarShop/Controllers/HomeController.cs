@@ -42,7 +42,7 @@ public class HomeController : ControllerBase
             var count = GetProductCounter();
             ViewBag.Count = count;
         }
-        ViewData["Categories"] = GetCategory(); // fuuuuuuuuuuuuuck
+        ViewData["Categories"] = GetCategories(); // fuuuuuuuuuuuuuck
         return View();
     }
 
@@ -60,7 +60,7 @@ public class HomeController : ControllerBase
                     var model = _mapper.Map<ProductViewModel>(product);
                     modelList.Add(model);
                 }
-                ViewData["Categories"] = GetCategory();
+                ViewData["Categories"] = GetCategories();
                 ViewData["query"] = modelList;
                 return View(modelList);
             }
@@ -86,7 +86,7 @@ public class HomeController : ControllerBase
             var model = _mapper.Map<ProductViewModel>(product);
             modelList.Add(model);
         }
-        ViewData["Categories"] = GetCategory();
+        ViewData["Categories"] = GetCategories();
         return View(modelList);
     }
 
@@ -99,7 +99,7 @@ public class HomeController : ControllerBase
             var model = _mapper.Map<CategoryViewModel>(category);
             modelList.Add(model);
         }
-        ViewBag.Cotegories = GetCategory();
+        ViewBag.Cotegories = GetCategories();
         return PartialView("NavigationMenu", modelList);
     }
 
